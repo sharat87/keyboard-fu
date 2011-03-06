@@ -57,6 +57,11 @@
         tabClose: function () {
             console.info('close tab from fu');
             chrome.extension.sendRequest({ action: 'tabClose' });
+        },
+
+        tabUndoClose: function () {
+            console.info('undo close tab from fu');
+            chrome.extension.sendRequest({ action: 'tabUndoClose' });
         }
 
     };

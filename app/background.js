@@ -3,7 +3,6 @@ jQuery(function ($) {
     // TODO
     // Grab undo-close-tab functionality from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
     // Add Bespin/Skywriter to the javascript code editing experience
-    // Import/Export hotkeys
 
     var specialKeys = {
         8: "BackSpace", 9: "Tab", 13: "Return", 16: "Shift", 17: "Ctrl", 18: "Alt", 19: "Pause",
@@ -81,6 +80,13 @@ jQuery(function ($) {
             chrome.tabs.getSelected(null, function (tab) {
                 chrome.tabs.remove(tab.id);
             });
+        },
+
+        tabUndoClose: function (request, sender, sendResponse) {
+            console.info('tabUndoClose request made');
+            if (allClosedTabs.length) {
+                chrome.tabs.create({ url: allClosedTabs.pop() });
+            }
         }
 
     };
@@ -101,7 +107,8 @@ jQuery(function ($) {
             11: { keyc: 'N', desc: 'Move tab left', code: 'fu.tabLeft()', allow: [] },
             12: { keyc: 'M', desc: 'Move tab right', code: 'fu.tabRight()', allow: [] },
             13: { keyc: '<C-x>', desc: 'Close tab', code: 'fu.tabClose()', allow: [] },
-            14: { keyc: 't', desc: 'Just a test', code: 'alert(\'passed\')', allow: ['http://*.google.com/*'] }
+            14: { keyc: 'u', desc: 'Undo close tab', code: 'fu.tabUndoClose()', allow: [] },
+            15: { keyc: 't', desc: 'Just a test', code: 'alert(\'passed\')', allow: ['http://*.google.com/*'] }
         },
 
         // Storage data strucutre:
@@ -226,6 +233,23 @@ jQuery(function ($) {
             });
         });
     }
+
+    // Spying on closed tabs. Code stolen from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
+    // Listener on update.
+    var allOpenTabs = {}, allClosedTabs = [];
+    chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+        if (tab && changeInfo.status == 'complete') {
+            allOpenTabs[tabId] = tab;
+        }
+    });
+
+    // Listener on remove.
+    chrome.tabs.onRemoved.addListener(function (tabId) {
+        var tabInfo = allOpenTabs[tabId];
+        if (tabInfo == undefined) return;
+        delete allOpenTabs[tabId];
+        allClosedTabs.push(tabInfo.url);
+    });
 
     // Gives a string that is a regex representation of the given glob pattern
     function globToRegex(line) {

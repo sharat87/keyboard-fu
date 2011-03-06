@@ -4,6 +4,11 @@
 
     var fu = window.fu = {
 
+        openOptionsPage: function (target) {
+            console.info('opening options page from fu');
+            chrome.extension.sendRequest({ action: 'openOptionsPage', target: target });
+        },
+
         scrollDown: function (size, time) {
             console.info('scroll down from fu');
             body.animate({ scrollTop: body.scrollTop() + (size || 100) }, time || 150);

@@ -59,6 +59,18 @@ jQuery(function ($) {
             sendResponse(readKeyCombo(request.edata, request.isInputSource));
         },
 
+        openOptionsPage: function (request, sender, sendResponse) {
+            var target = request.target,
+                url = chrome.extension.getURL('options.html');
+            if (target == 'newTab') {
+                chrome.tabs.create({ url: url });
+            } else if (target == 'newWindow') {
+                chrome.windows.create({ url: url });
+            } else {
+                window.location = url;
+            }
+        },
+
         tabSwitchBy: function (request, sender, sendResponse) {
             console.info('tabSwitch request made');
             tabSwitchBy(request.count);
@@ -104,7 +116,8 @@ jQuery(function ($) {
             12: { keyc: 'M', desc: 'Move tab right', code: 'fu.tabRight()', allow: [] },
             13: { keyc: '<C-x>', desc: 'Close tab', code: 'fu.tabClose()', allow: [] },
             14: { keyc: 'u', desc: 'Undo close tab', code: 'fu.tabUndoClose()', allow: [] },
-            15: { keyc: 't', desc: 'Just a test', code: 'alert(\'passed\')', allow: ['http://*.google.com/*'] }
+            15: { keyc: 'go', desc: 'Open Keyboard-fu options page', code: 'fu.openOptionsPage("newTab")', allow: [] },
+            16: { keyc: 't', desc: 'Just a test', code: 'alert(\'passed\')', allow: ['http://*.google.com/*'] }
         },
 
         // Storage data strucutre:

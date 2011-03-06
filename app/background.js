@@ -1,7 +1,6 @@
 jQuery(function ($) {
 
     // TODO
-    // Grab undo-close-tab functionality from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
     // Add Bespin/Skywriter to the javascript code editing experience
 
     var specialKeys = {

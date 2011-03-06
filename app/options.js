@@ -105,13 +105,18 @@ jQuery(function ($) {
         saveHotkeys();
     });
 
+    $('#saveNewKeyBtn').click(function (e) {
+        keyForm.find('input.id-input').val(nextId);
+        $('#saveKeyBtn').click();
+    });
+
     $('#delKeyBtn').click(function (e) {
         var th = $(this), id = keyForm.find('input.id-input').val();
         delete hotkeys[id];
         saveHotkeys();
     });
 
-    function saveHotkeys(e, append) {
+    function saveHotkeys() {
         chrome.extension.sendRequest({ action: 'setHotkeys', hotkeys: hotkeys }, function (response) {
             keyFormStatus.html(response.ok ? 'Saved successfully' : 'Error saving. Please try again later.')
                 .delay(2000).fadeOut(1000);

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ -d _pkg ]
+then
+    echo _pkg already exists. Please delete it.
+    exit 1
+fi
+
+mkdir _pkg
+for f in (app css doc res background.html options.html manifest.json)
+do
+    cp $f _pkg
+done
+cd _pkg
+
+rm -Rf res/*.xcf
+
+file keyboard-fu.zip && rm keyboard-fu.zip
+zip -r . keyboard-fu.zip
+
+mv keyboard-fu.zip ..
+cd ..
+rm -Rf _pkg

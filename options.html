@@ -1,0 +1,48 @@
+<html>
+
+    <head>
+        <title>Keyboard-fu options</title>
+        <script type="text/javascript" src="app/jquery.js"></script>
+        <script type="text/javascript" src="app/options.js"></script>
+        <link rel=stylesheet href="css/options.css"></link>
+    </head>
+
+    <body>
+
+        <div id=sidePane>
+
+            <h2>Keyboard-fu</h2>
+            <p>
+                Select a key-combo from the list below to view/edit it. Note that any changes will be applied
+                on newly loaded or reloaded tabs.
+            </p>
+
+            <div id=keyList></div>
+            <a id=newKeyBtn href="#">+ Add new hotkey</a>
+
+            <div id=bottomControls>
+                <a id=docBtn href="#">API Docs</a>
+            </div>
+
+        </div>
+
+        <div id=mainPane>
+
+            <div id=keyBox class=box style=display:none>
+                <div id=keyForm></div>
+                <div id=keyFormControls>
+                    <button id=saveKeyBtn>Save hotkey</button>
+                    <button id=delKeyBtn>Delete hotkey</button>
+                    <span class=status />
+                </div>
+            </div>
+
+            <div id=docBox class=box style=display:none></div>
+
+        </div>
+
+        <!-- <button id=saveBtn>Save</button> -->
+
+    </body>
+
+</html>

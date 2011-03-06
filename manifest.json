@@ -1,0 +1,21 @@
+{
+    "name": "Keyboard-Fu",
+    "version": "0.1",
+    "description": "Super customizable keyboard shortcuts for just the necessities",
+    "icons": {
+        "16": "res/logo-16.png",
+        "48": "res/logo-48.png",
+        "128": "res/logo-128.png"
+    },
+    "permissions": [
+        "http://*/*", "https://*/*",
+        "tabs"
+    ],
+    "background_page": "background.html",
+    "options_page": "options.html",
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "js": ["app/jquery.js", "app/jquery.hotkeys.js",
+            "app/api.js", "app/content-script.js"]
+    }]
+}

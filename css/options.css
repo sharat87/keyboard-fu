@@ -1,0 +1,112 @@
+@font-face {
+    font-family: Steinem;
+    src: url("../res/STEINEMU.ttf");
+}
+
+@font-face {
+    font-family: Puritan;
+    src: url("../res/PURI10.TTF");
+}
+
+@font-face {
+    font-family: DroidSansMono;
+    src: url("../res/DroidSansMono.ttf");
+}
+
+body {
+    margin: 0;
+    font-family: Puritan, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Steinem, serif;
+    text-shadow: 0 1px 2px gray;
+}
+
+code, pre, tt, textarea {
+    font-family: DroidSansMono;
+}
+
+#sidePane {
+    height: 100%;
+    background: #EEE;
+    width: 280px;
+    float: left;
+    position: fixed;
+    border-right: thin solid gray;
+}
+
+#sidePane a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 2px 4px;
+}
+
+#sidePane a:hover {
+    background: #ABCDEF;
+}
+
+#keyList {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+#keyList a.hotkey-item.selected {
+    background: #ABCDEF;
+}
+
+#keyList a.hotkey-item .keyc {
+    margin-right: 10px;
+}
+
+#keyList a.hotkey-item .desc {
+    color: gray;
+}
+
+#newKeyBtn {
+    margin-top: 7px;
+}
+
+#bottomControls {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    font-size: 1.2em;
+}
+
+#mainPane {
+    margin-left: 280px;
+    height: 100%;
+    background: #FDFDFD;
+    padding: 0 10px;
+}
+
+#keyForm label {
+    display: block;
+}
+
+#keyForm label span.title {
+    width: 170px;
+    display: inline-block;
+}
+
+#keyForm input.text,
+#keyForm textarea {
+    padding: 4px 8px;
+    width: 300px;
+    border: thin solid gray;
+}
+
+#keyForm textarea {
+    vertical-align: top;
+}
+
+#keyFormControls {
+    margin-top: 12px;
+}
+
+#docBox {
+    text-shadow: 0 1px rgba(66, 162, 255, .3);
+    padding: 3px 10px 20px;
+}

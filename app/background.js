@@ -152,11 +152,7 @@ jQuery(function ($) {
         },
 
         export: function () {
-            var exportObj = {};
-            for (key in localStorage) {
-                exportObj[key] = localStorage[key];
-            }
-            return JSON.stringify(exportObj);
+            return JSON.stringify(localStorage);
         }
 
     };

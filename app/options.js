@@ -131,16 +131,29 @@ jQuery(function ($) {
 
     loadHotkeys();
 
-    var docBox = $('#docBox').load('doc/api.html');
-    $('#docBtn').click(function (e) {
+    $('#bottomControls').delegate('a', 'click', function (e) {
         e.preventDefault();
         keyList.find('a.selected').removeClass('selected');
+    });
+
+    var docBox = $('#docBox').load('doc/api.html');
+    $('#docBtn').click(function (e) {
         docBox.show().siblings('div.box').hide();
     });
 
-    var ieBox = $('#ieBox');
+    var ieBox = $('#ieBox')
+        .delegate('.import-btn', 'click', function (e) {
+            var th = $(this);
+            chrome.extension.sendRequest({ action: 'importHotkeys', content: $('#importBox').val() }, function (response) {
+                loadHotkeys();
+                th.after(response.ok ? '<span>Import successful.</span>' : '<span>Import failed. Please try again later.</span>')
+                    .next().delay(2000).fadeOut(1000);
+            });
+        });
     $('#ieBtn').click(function (e) {
-        e.preventDefault();
+        chrome.extension.sendRequest({ action: 'exportHotkeys' }, function (content) {
+            $('#exportBox').val(content);
+        });
         ieBox.show().siblings('div.box').hide();
     });
 

@@ -13,12 +13,13 @@ jQuery(function ($) {
             keyList.empty();
             $.each(hotkeys, function (id, keyData) {
                 keyList.append('<a href="#" class="hotkey-item' + (id == selectedKeyId ? ' selected' : '') + '">' +
-                    '<code class=keyc>' + keyData.keyc + '</code>' +
-                    '<span class=desc>' + keyData.desc + '</span>' +
+                    '<code class=keyc></code><span class=desc></span>' +
                     '</a>')
                     .children('a.hotkey-item:last')
                     .data('key-id', id)
-                    .data('key-data', keyData);
+                    .data('key-data', keyData)
+                    .children('.keyc').text(keyData.keyc).end()
+                    .children('.desc').text(keyData.desc);
                 if (nextId == id) {
                     nextId++;
                 }
@@ -29,7 +30,7 @@ jQuery(function ($) {
     function loadKeyForm(id) {
         
         var keyBoxMarkup = '<input type=hidden class=id-input value=' + (id || nextId) + ' />' +
-                '<label><span class=title>Hotkey</span><input type=text class="keyc-input text" /></label>' +
+                '<label><span class=title>Hotkey</span><input type=text class="keyc-input text" data-keyc="" /><a href="#" class=keyc-clear-btn>Clear</a></label>' +
                 '<label><span class=title>Description</span><input type=text class="desc-input text" /></label>' +
                 '<label><span class=title>Code to execute</span><textarea rows=10 class="code-input text" /></label>' +
                 '<label><span class=title>Url filter</span><input type=text class="allow-input text" /> separate patterns with <tt>;</tt></label>';
@@ -38,7 +39,7 @@ jQuery(function ($) {
 
         if (id) {
             var keyData = hotkeys[id];
-            keyForm.find('input.keyc-input').val(keyData.keyc);
+            keyForm.find('input.keyc-input').val(keyData.keyc).data('keyc', keyData.keyc);
             keyForm.find('input.desc-input').val(keyData.desc);
             keyForm.find('textarea.code-input').val(keyData.code);
             keyForm.find('input.allow-input').val(keyData.allow.join('; '));
@@ -60,6 +61,35 @@ jQuery(function ($) {
         keyList.find('a.selected').removeClass('selected');
         loadKeyForm();
     });
+
+    keyForm
+        .delegate('input.keyc-input', 'keydown keypress', function (e) {
+
+            e.stopPropagation();
+            e.preventDefault();
+
+            var th = $(this);
+
+            var edata = {
+                type: e.type,
+                which: e.which,
+                shiftKey: e.shiftKey,
+                ctrlKey: e.ctrlKey,
+                altKey: e.altKey,
+                metaKey: e.metaKey
+            };
+
+            chrome.extension.sendRequest({ action: 'readKeyCombo', edata: edata, isInputSource: true }, function (combo) {
+                var totalCombo = th.data('keyc') + combo;
+                th.data('keyc', totalCombo);
+                th.val(totalCombo);
+            });
+
+        })
+        .delegate('a.keyc-clear-btn', 'click', function (e) {
+            $(this).siblings('input.keyc-input').val('').data('keyc', '');
+            e.preventDefault();
+        });
 
     $('#saveKeyBtn').click(function (e) {
         var th = $(this), id = keyForm.find('input.id-input').val();

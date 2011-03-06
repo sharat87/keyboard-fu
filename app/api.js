@@ -26,12 +26,12 @@
 
         scrollToTop: function (time) {
             console.info('scroll to top from fu');
-            body.animate({ scrollTop: body.height() }, 150);
+            body.animate({ scrollTop: 0 }, 150);
         },
 
         scrollToBottom: function (time) {
             console.info('scroll to bottom from fu');
-            body.animate({ scrollTop: 0 }, 150);
+            body.animate({ scrollTop: body.height() }, 150);
         },
 
         tabNext: function () {

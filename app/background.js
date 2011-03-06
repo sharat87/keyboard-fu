@@ -34,6 +34,10 @@ jQuery(function ($) {
             alert(request.message);
         },
 
+        console: function (request) {
+            console[request.fn].apply(console, request.args);
+        },
+
         getHotkeys: function (request, sender, sendResponse) {
             console.info('hotkeys get request made');
             sendResponse(keyStore.load(request.urlsAsGlobs));

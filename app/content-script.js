@@ -1,3 +1,20 @@
+var console = (function () {
+
+    function _log(fn) {
+        return function () {
+            chrome.extension.sendRequest({ action: 'console', fn: fn, args: [].slice.call(arguments, 0) });
+        };
+    }
+
+    return {
+        log: _log('log'),
+        info: _log('info'),
+        debug: _log('debug'),
+        error: _log('error')
+    };
+
+}());
+
 jQuery(function ($) {
 
     var keyComboMap = {};

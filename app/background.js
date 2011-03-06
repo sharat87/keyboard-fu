@@ -1,8 +1,5 @@
 jQuery(function ($) {
 
-    // TODO
-    // Add Bespin/Skywriter to the javascript code editing experience
-
     var specialKeys = {
         8: "BackSpace", 9: "Tab", 13: "Return", 16: "Shift", 17: "Ctrl", 18: "Alt", 19: "Pause",
         20: "CapsLock", 27: "Esc", 32: "Space", 33: "PageUp", 34: "PageDown", 35: "End", 36: "Home",

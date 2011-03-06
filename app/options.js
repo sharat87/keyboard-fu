@@ -68,6 +68,11 @@ jQuery(function ($) {
             e.stopPropagation();
             e.preventDefault();
 
+            // ESC key
+            if (e.which == 27) {
+                return;
+            }
+
             var th = $(this);
 
             var edata = {
@@ -131,6 +136,12 @@ jQuery(function ($) {
         e.preventDefault();
         keyList.find('a.selected').removeClass('selected');
         docBox.show().siblings('div.box').hide();
+    });
+
+    var ieBox = $('#ieBox');
+    $('#ieBtn').click(function (e) {
+        e.preventDefault();
+        ieBox.show().siblings('div.box').hide();
     });
 
 });

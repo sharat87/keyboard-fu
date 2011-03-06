@@ -3,7 +3,6 @@ jQuery(function ($) {
     // TODO
     // Grab undo-close-tab functionality from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
     // Add Bespin/Skywriter to the javascript code editing experience
-    // Save as new button in hotkey editing form
     // Import/Export hotkeys
 
     var specialKeys = {
@@ -44,6 +43,17 @@ jQuery(function ($) {
             console.info('hotkeys save request made');
             keyStore.dump(request.hotkeys);
             sendResponse({ ok: true });
+        },
+
+        importHotkeys: function (request, sender, sendResponse) {
+            console.info('hotkeys import request made');
+            keyStore.import(request.content);
+            sendResponse({ ok: true });
+        },
+
+        exportHotkeys: function (request, sender, sendResponse) {
+            console.info('hotkeys export request made');
+            sendResponse(keyStore.export());
         },
 
         readKeyCombo: function (request, sender, sendResponse) {
@@ -127,6 +137,22 @@ jQuery(function ($) {
                 rawHotkeys.push([i, keyData.keyc, keyData.desc, keyData.code, keyData.allow]);
             });
             localStorage.hotkeys = JSON.stringify(rawHotkeys);
+        },
+
+        import: function (content) {
+            var importObj = JSON.parse(content);
+            localStorage.clear();
+            for (key in importObj) {
+                localStorage[key] = importObj[key];
+            }
+        },
+
+        export: function () {
+            var exportObj = {};
+            for (key in localStorage) {
+                exportObj[key] = localStorage[key];
+            }
+            return JSON.stringify(exportObj);
         }
 
     };

@@ -83,6 +83,12 @@ jQuery(function ($) {
             return;
         }
 
+        // ESC key
+        if (e.which == 27) {
+            keyQueue.clear();
+            return;
+        }
+
         var edata = {
             type: e.type,
             which: e.which,

@@ -8,7 +8,7 @@ jQuery(function ($) {
         keyFormStatus = keyFormControls.find('.status');
 
     function loadHotkeys(selectedKeyId) {
-        chrome.extension.sendRequest({ action: 'getHotkeys', urlsAsGlobs: true }, function (_hotkeys) {
+        chrome.extension.sendRequest({ action: 'getHotkeys' }, function (_hotkeys) {
             hotkeys = _hotkeys;
             keyList.empty();
             $.each(hotkeys, function (id, keyData) {
@@ -33,7 +33,7 @@ jQuery(function ($) {
                 '<label><span class=title>Hotkey</span><input type=text class="keyc-input text" data-keyc="" /><a href="#" class=keyc-clear-btn>Clear</a></label>' +
                 '<label><span class=title>Description</span><input type=text class="desc-input text" /></label>' +
                 '<label><span class=title>Code to execute</span><textarea rows=10 class="code-input text" /></label>' +
-                '<label><span class=title>Url filter</span><input type=text class="allow-input text" /> separate patterns with <tt>;</tt></label>';
+                '<label><span class=title>Url filter (Global filters will be added to the end of this list)</span><textarea rows=7 class="filters-input text" /> one pattern per line';
 
         keyForm.html(keyBoxMarkup);
 
@@ -42,7 +42,7 @@ jQuery(function ($) {
             keyForm.find('input.keyc-input').val(keyData.keyc).data('keyc', keyData.keyc);
             keyForm.find('input.desc-input').val(keyData.desc);
             keyForm.find('textarea.code-input').val(keyData.code);
-            keyForm.find('input.allow-input').val(keyData.allow.join('; '));
+            keyForm.find('textarea.filters-input').val(keyData.filters.join('\n'));
         }
 
         keyBox.show().siblings('.box').hide();
@@ -63,10 +63,13 @@ jQuery(function ($) {
     });
 
     keyForm
-        .delegate('input.keyc-input', 'keydown keypress', function (e) {
+        .delegate('input.keyc-input', 'keydown keypress keyup', function (e) {
 
             e.stopPropagation();
             e.preventDefault();
+
+            console.info('key event:', e.type, e);
+            if (e.type == 'keyup') return;
 
             // ESC key
             if (e.which == 27) {
@@ -106,7 +109,7 @@ jQuery(function ($) {
         hotkeys[id].keyc = keyForm.find('input.keyc-input').val();
         hotkeys[id].desc = keyForm.find('input.desc-input').val();
         hotkeys[id].code = keyForm.find('textarea.code-input').val();
-        hotkeys[id].allow = keyForm.find('input.allow-input').val().split(';');
+        hotkeys[id].filters = keyForm.find('textarea.filters-input').val().split('\n');
         saveHotkeys();
     });
 
@@ -130,6 +133,26 @@ jQuery(function ($) {
     }
 
     loadHotkeys();
+
+    function loadGlobalFilters() {
+        chrome.extension.sendRequest({ action: 'getGlobalFilters' }, function (filters) {
+            $('#globalFilterInput').val(filters.join('\n'));
+        });
+    }
+
+    var globalFilterBox = $('#globalFilterBox');
+    $('#globalFiltersBtn').click(function (e) {
+        loadGlobalFilters();
+        globalFilterBox.show().siblings('div.box').hide();
+    });
+
+    $('#globalFilterSaveBtn').click(function (e) {
+        chrome.extension.sendRequest({ action: 'setGlobalFilters', filters: $('#globalFilterInput').val() }, function (response) {
+            loadGlobalFilters();
+            th.after(response.ok ? '<span>Saved successfully.</span>' : '<span>Saving failed. Please try again later.</span>')
+                .next().delay(2000).fadeOut(1000);
+        });
+    });
 
     $('#bottomControls').delegate('a', 'click', function (e) {
         e.preventDefault();

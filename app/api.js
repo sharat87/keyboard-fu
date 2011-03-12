@@ -9,6 +9,11 @@
             chrome.extension.sendRequest({ action: 'openOptionsPage', target: target });
         },
 
+        openParentPage: function () {
+            console.info('open parent page from fu');
+            window.location = window.location.toString().replace(/\/[^\/]+\/?/, '');
+        },
+
         scrollDown: function (size, time) {
             console.info('scroll down from fu');
             body.animate({ scrollTop: body.scrollTop() + (size || 100) }, time || 150);

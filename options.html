@@ -20,6 +20,8 @@
             <div id=keyList></div>
             <a id=newKeyBtn href="#">+ Add new hotkey</a>
 
+            <a id=globalFiltersBtn href="#">Global filters</a>
+
             <div id=bottomControls>
                 <a id=docBtn href="#">API Docs</a>
                 <a id=ieBtn href="#">Import/Export Hotkeys</a>
@@ -36,6 +38,34 @@
                     <button id=saveNewKeyBtn>Save as a new hotkey</button>
                     <button id=delKeyBtn>Delete hotkey</button>
                     <span class=status />
+                </div>
+            </div>
+
+            <div id=globalFilterBox class=box style=display:none>
+                <h2>Global hotkey filters</h2>
+                <p>
+                    The filter patterns added to the following list are added to the end of the filter lists of each
+                    hotkey. When you open a url, the url is matched with every pattern in this total list and stopped
+                    at the first match. If this match starts with a <tt>-</tt> the hotkey is not applied, else, is
+                    applied. Either way, no further patterns are matched against the url.
+                </p>
+                <p>
+                    <b>Note:</b> Due to the above nature, if you want a hotkey to only load in a particular website,
+                    like e.g., only on <i>http://*.google.com/*</i> and not load on any other page, add a <i>-*</i>
+                    just after that pattern and all that don't match the first pattern (the google one) will be matched
+                    with the next one, and will not load since it starts with a <tt>-</tt>
+                </p>
+                <p>
+                    I hope this explanation is not confusing. However, if you think it can be improved, please get in
+                    touch. Thanks.
+                </p>
+                <div id=filterListContainer>
+                    <div id=globalFilter>
+                        <h3>Filter list</h3>
+                        <textarea id=globalFilterInput rows=10 cols=80></textarea>
+                        <br/>
+                        <button id=globalFilterSaveBtn>Save</button>
+                    </div>
                 </div>
             </div>
 

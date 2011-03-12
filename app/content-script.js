@@ -1,4 +1,4 @@
-var console = (function () {
+var _console = (function () {
 
     function _log(fn) {
         return function () {
@@ -33,32 +33,56 @@ jQuery(function ($) {
         return mask;
     }());
 
-    chrome.extension.sendRequest({ action: 'getHotkeys', urlsAsGlobs: false }, function (hotkeys) {
+    chrome.extension.sendRequest({ action: 'getHotkeys' }, function (hotkeys) {
 
         console.info('got hotkeys');
         var loc = window.location.toString();
 
         $.each(hotkeys, function (id, keyData) {
 
-            var allow = false, i = 0, l = keyData.allow.length;
-            if (l == 0) {
-                // No allow urls given, so allow all
-                allow = true;
-            } else {
-                while (i < l) {
-                    var pat = keyData.allow[i++];
-                    if (loc.match(new RegExp(pat)) !== null) {
-                        allow = true;
-                        break;
-                    }
+            var allow = false, i = 0, l = keyData.filters.length;
+            while (i < l) {
+                var pat = keyData.filters[i++], isNegativePattern = pat[0] == '-';
+                console.info('matching with pattern', pat);
+                if (isNegativePattern) {
+                    pat = pat.substr(1);
+                }
+                if (loc.match(new RegExp(globToRegex(pat))) !== null) {
+                    allow = isNegativePattern;
+                    break;
                 }
             }
-            if (!allow) {
-                return;
-            }
 
-            keyData.id = id;
-            keyComboMap[keyData.keyc] = keyData;
+            if (!allow) {
+                chrome.extension.sendRequest({ action: 'getGlobalFilters' }, function (filters) {
+
+                    var i = 0, l = filters.length;
+
+                    while (i < l) {
+                        var pat = filters[i++], isNegativePattern = pat[0] == '-';
+                        console.info('matching with pattern', pat);
+                        if (isNegativePattern) {
+                            pat = pat.substr(1);
+                        }
+                        console.info('regex is', new RegExp(globToRegex(pat)), loc);
+                        if (loc.match(new RegExp(globToRegex(pat))) !== null) {
+                            console.info('match successful');
+                            allow = !isNegativePattern;
+                            break;
+                        }
+                    }
+
+                    if (!allow) {
+                        console.info('allow is false');
+                        return;
+                    }
+
+                    keyData.id = id;
+                    keyComboMap[keyData.keyc] = keyData;
+                    console.info('combo map', keyData.keyc, keyData);
+
+                });
+            }
 
         });
 
@@ -99,6 +123,9 @@ jQuery(function ($) {
                                   typeof $(e.target).attr('contenteditable') !== 'undefined')) {
             return;
         }
+
+        console.info('key event:', e.type, e);
+        if (e.type == 'keyup') return;
 
         // ESC key
         if (e.which == 27) {
@@ -169,6 +196,87 @@ jQuery(function ($) {
 
         console.info('key queue', keyQueue.q);
 
+    }
+
+    // Gives a string that is a regex representation of the given glob pattern
+    function globToRegex(line) {
+        console.info("got line [" + line + "]");
+        line = $.trim(line);
+        
+        var sb = [];
+        
+        // Remove beginning and ending * globs because they're useless
+        if (line.length > 1 && line[0] === "*") {
+            line = line.substring(1);
+        }
+        if (line.length > 1 && line[line.length-1] === "*") {
+            line = line.substring(0, line.length - 1);
+        }
+        
+        var i = 0, len = line.length,
+            escaping = false, inCurlies = 0;
+        
+        while (i < len) {
+            var currentChar = line[i++];
+            switch (currentChar) {
+            case '*':
+                sb.push(escaping ? "\\*" : ".*");
+                escaping = false;
+                break;
+            case '?':
+                sb.push(escaping ? "\\?" : ".");
+                escaping = false;
+                break;
+            case '.':
+            case '(':
+            case ')':
+            case '+':
+            case '|':
+            case '^':
+            case '$':
+            case '@':
+            case '%':
+                sb.push('\\');
+                sb.push(currentChar);
+                escaping = false;
+                break;
+            case '\\':
+                escaping && sb.push("\\\\");
+                escaping = !escaping;
+                break;
+            case '{':
+                sb.push(escaping ? '\\{' : '(');
+                if (!escaping) {
+                    inCurlies++;
+                }
+                escaping = false;
+                break;
+            case '}':
+                if (inCurlies > 0 && !escaping) {
+                    sb.push(')');
+                    inCurlies--;
+                } else if (escaping) {
+                    sb.push("\\}");
+                } else {
+                    sb.push("}");
+                }
+                escaping = false;
+                break;
+            case ',':
+                if (inCurlies > 0 && !escaping) {
+                    sb.push('|');
+                } else if (escaping) {
+                    sb.push("\\,");
+                } else {
+                    sb.push(",");
+                }
+                break;
+            default:
+                escaping = false;
+                sb.push(currentChar);
+            }
+        }
+        return sb.join('');
     }
 
 });

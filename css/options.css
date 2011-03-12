@@ -106,6 +106,21 @@ code, pre, tt, textarea {
     margin-top: 12px;
 }
 
+#filterListContainer {
+    width: 90%;
+    position: relative;
+}
+
+#globalWhiteList {
+    float: left;
+    width: 45%;
+}
+
+#globalBlackList {
+    float: right;
+    width: 45%;
+}
+
 #docBox {
     text-shadow: 0 1px rgba(66, 162, 255, .3);
     padding: 3px 10px 20px;

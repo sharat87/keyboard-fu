@@ -1,0 +1,19 @@
+#keyboardFuQueue {
+    -webkit-border-radius: 4px;
+    background: black;
+    bottom: 20px;
+    color: white;
+    opacity: .8;
+    position: fixed;
+    right: 50px;
+    font-size: 30px;
+    line-height: 40px;
+    font-family: Monaco, Consolas, Inconsolata, "Liberation Mono", monospace;
+    padding: 5px 12px;
+    display: none;
+    -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+#keyboardFuQueue.active {
+    display: block;
+}

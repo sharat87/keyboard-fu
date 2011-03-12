@@ -82,13 +82,18 @@ code, pre, tt, textarea {
     padding: 0 10px;
 }
 
+#keyForm {
+    padding: 4px 7px;
+}
+
 #keyForm label {
     display: block;
 }
 
-#keyForm label span.title {
+#keyForm span.title {
     width: 170px;
     display: inline-block;
+    cursor: default;
 }
 
 #keyForm input.text,
@@ -96,6 +101,18 @@ code, pre, tt, textarea {
     padding: 4px 8px;
     width: 300px;
     border: thin solid gray;
+}
+
+#keyForm .keyc-display {
+    font-family: DroidSansMono;
+    margin-right: 8px;
+    padding: 3px 4px;
+}
+
+#keyForm .keyc-display.capturing {
+    background-color: maroon;
+    -webkit-border-radius: 2px;
+    color: beige;
 }
 
 #keyForm textarea {

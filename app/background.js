@@ -68,12 +68,12 @@ jQuery(function ($) {
         openOptionsPage: function (request, sender, sendResponse) {
             var target = request.target,
                 url = chrome.extension.getURL('options.html');
-            if (target == 'newTab') {
-                chrome.tabs.create({ url: url });
-            } else if (target == 'newWindow') {
+            if (target == 'here') {
+                window.location = url;
+            } else if (target == 'window') {
                 chrome.windows.create({ url: url });
             } else {
-                window.location = url;
+                chrome.tabs.create({ url: url });
             }
         },
 
@@ -190,13 +190,6 @@ jQuery(function ($) {
         }
 
     };
-
-    chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
-        return;
-        chrome.tabs.get(tabId, function (tab) {
-                console.info('closed tab', tab);
-        });
-    });
 
     // Switch tab by `count` tabs. If count is 1, goes to next tab, if it is -1, goes to previous tab.
     // Does not wrap

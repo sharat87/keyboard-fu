@@ -41,6 +41,13 @@ The following are the functions available under the ``fu`` object. You can use t
 ``fu.tabClose()``
     Close the current tab.
 
+``fu.tabUndoClose()``
+    Undo closing of last tab.
+
+``fu.openOptionsPage(target)``
+    Open Keyboard-Fu's options page. If ``target`` is ``'here'``, opens in current tab. If it is ``'window'``, opens in a new window.
+    Otherwise, opens in a new tab, which is the default, i.e., if no ``target`` is given.
+
 Additional Notes
 ----------------
 

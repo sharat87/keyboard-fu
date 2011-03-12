@@ -31,8 +31,8 @@ jQuery(function ($) {
         
         var keyBoxMarkup = '<input type=hidden class=id-input value=' + (id || nextId) + ' />' +
                 // '<label><span class=title>Hotkey</span><input type=text class="keyc-input text" data-keyc="" /><a href="#" class=keyc-clear-btn>Clear</a></label>' +
-                '<label><span class=title>Hotkey</span><span type=text class="keyc-display text" data-keyc=""></span></label>' +
-                    '<button class=keyc-capture-btn>Capture</button><button class=keyc-uncapture-btn style=display:none>Done</button><button class=keyc-clear-btn>Clear</button>' +
+                '<div><span class=title>Hotkey</span><span type=text class="keyc-display text" data-keyc=""></span>' +
+                    '<button class=keyc-capture-btn>Capture</button><button class=keyc-uncapture-btn style=display:none>Stop Capture</button><button class=keyc-clear-btn>Clear</button></div>' +
                 '<label><span class=title>Description</span><input type=text class="desc-input text" /></label>' +
                 '<label><span class=title>Code to execute</span><textarea rows=10 class="code-input text" /></label>' +
                 '<label><span class=title>Url filter (Global filters will be added to the end of this list)</span><textarea rows=7 class="filters-input text" /> one pattern per line';
@@ -68,15 +68,9 @@ jQuery(function ($) {
 
     function keyHandler(e) {
 
-        console.info('key event:', e.type, e);
         if (!keycCapture) return;
 
         e.stopPropagation();
-
-        // ESC key
-        if (e.which == 27) {
-            return;
-        }
 
         keyForm.find('span.keyc-display').text(function (i, oldVal) {
             return oldVal + readKeyCombo(e);
@@ -88,15 +82,13 @@ jQuery(function ($) {
     document.addEventListener('keypress', keyHandler);
 
     keyForm
-        .delegate('button.keyc-capture-btn', 'click', function (e) {
-            keycCapture = true;
-            $(this).hide().next().show();
+        .delegate('button.keyc-capture-btn, button.keyc-uncapture-btn', 'click', function (e) {
+            keycCapture = !keycCapture;
+            keyForm.find('span.keyc-display').toggleClass('capturing');
+            keyForm.find('input.text, textarea')[keycCapture ? 'attr' : 'removeAttr']('disabled', 1);
+            $(this).hide().siblings('button.keyc-capture-btn, button.keyc-uncapture-btn').show();
         })
-        .delegate('button.keyc-uncapture-btn', 'click', function (e) {
-            keycCapture = false;
-            $(this).hide().prev().show();
-        })
-        .delegate('a.keyc-clear-btn', 'click', function (e) {
+        .delegate('button.keyc-clear-btn', 'click', function (e) {
             keyForm.find('span.keyc-display').text('');
         });
 

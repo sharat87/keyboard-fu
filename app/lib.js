@@ -93,3 +93,84 @@ function readKeyCombo(e) {
     return keyChar;
 
 }
+
+// Gives a string that is a regex representation of the given glob pattern
+function globToRegex(line) {
+    console.info("got line [" + line + "]");
+    line = $.trim(line);
+    
+    var sb = [];
+    
+    // Remove beginning and ending * globs because they're useless
+    if (line.length > 1 && line[0] === "*") {
+        line = line.substring(1);
+    }
+    if (line.length > 1 && line[line.length-1] === "*") {
+        line = line.substring(0, line.length - 1);
+    }
+    
+    var i = 0, len = line.length,
+        escaping = false, inCurlies = 0;
+    
+    while (i < len) {
+        var currentChar = line[i++];
+        switch (currentChar) {
+        case '*':
+            sb.push(escaping ? "\\*" : ".*");
+            escaping = false;
+            break;
+        case '?':
+            sb.push(escaping ? "\\?" : ".");
+            escaping = false;
+            break;
+        case '.':
+        case '(':
+        case ')':
+        case '+':
+        case '|':
+        case '^':
+        case '$':
+        case '@':
+        case '%':
+            sb.push('\\');
+            sb.push(currentChar);
+            escaping = false;
+            break;
+        case '\\':
+            escaping && sb.push("\\\\");
+            escaping = !escaping;
+            break;
+        case '{':
+            sb.push(escaping ? '\\{' : '(');
+            if (!escaping) {
+                inCurlies++;
+            }
+            escaping = false;
+            break;
+        case '}':
+            if (inCurlies > 0 && !escaping) {
+                sb.push(')');
+                inCurlies--;
+            } else if (escaping) {
+                sb.push("\\}");
+            } else {
+                sb.push("}");
+            }
+            escaping = false;
+            break;
+        case ',':
+            if (inCurlies > 0 && !escaping) {
+                sb.push('|');
+            } else if (escaping) {
+                sb.push("\\,");
+            } else {
+                sb.push(",");
+            }
+            break;
+        default:
+            escaping = false;
+            sb.push(currentChar);
+        }
+    }
+    return sb.join('');
+}

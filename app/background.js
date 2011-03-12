@@ -12,28 +12,9 @@ jQuery(function ($) {
     var upgraders = {
 
         '0.2': function () {
-            
+
         }
 
-    };
-
-    var specialKeys = {
-        8: "BackSpace", 9: "Tab", 13: "Return", 16: "Shift", 17: "Ctrl", 18: "Alt", 19: "Pause",
-        20: "CapsLock", 27: "Esc", 32: "Space", 33: "PageUp", 34: "PageDown", 35: "End", 36: "Home",
-        37: "Left", 38: "Up", 39: "Right", 40: "Down", 45: "Insert", 46: "Del",
-        96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7",
-        104: "8", 105: "9", 106: "*", 107: "+", 109: "-", 110: ".", 111 : "/",
-        112: "F1", 113: "F2", 114: "F3", 115: "F4", 116: "F5", 117: "F6", 118: "F7", 119: "F8",
-        120: "F9", 121: "F10", 122: "F11", 123: "F12", 144: "NumLock", 145: "Scroll", 187: "=",
-        188: ",", 189: "-", 190: ".", 191: "/", 224: "Meta"
-    };
-
-    var modifiers = { '<Ctrl>': true, '<Alt>': true, '<Shift>': true, '<Meta>': true };
-
-    var shiftNums = {
-        "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&",
-        "8": "*", "9": "(", "0": ")", "-": "_", "=": "+", ";": ": ", "'": "\"", ",": "<",
-        ".": ">",  "/": "?",  "\\": "|"
     };
 
     chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
@@ -82,10 +63,6 @@ jQuery(function ($) {
             console.info('global fitlers get request made');
             keyStore.dumpGlobalFilters(request.filters);
             sendResponse({ ok: true });
-        },
-
-        readKeyCombo: function (request, sender, sendResponse) {
-            sendResponse(readKeyCombo(request.edata, request.isInputSource));
         },
 
         openOptionsPage: function (request, sender, sendResponse) {
@@ -213,55 +190,6 @@ jQuery(function ($) {
         }
 
     };
-
-    // Mine a minimal event object and create a string that represents the keypress
-    // in vim/emacs like syntax
-    function readKeyCombo(edata, isInputSource) {
-
-        // Keypress represents characters, not special keys
-        var special = edata.type !== "keypress" && specialKeys[edata.which],
-            character = String.fromCharCode(edata.which).toLowerCase(),
-            hasShift, hasCtrl, hasAlt, hasMeta, modif = '', combo;
-
-        // check combinations (alt|ctrl|shift+anything)
-        hasAlt = edata.altKey && special !== "Alt";
-        hasCtrl = edata.ctrlKey && special !== "Ctrl";
-        hasShift =  edata.shiftKey && special !== "Shift";
-
-        // TODO: Need to make sure this works consistently across platforms
-        hasMeta =  edata.metaKey && !edata.ctrlKey && special !== "meta";
-
-        modif = '<' + (hasShift && special ? 'S-' : '') + (hasCtrl ? 'C-' : '') + (hasAlt ? 'A-' : '') + (hasMeta ? 'M-' : '');
-        modif = modif == '<' ? '' : modif;
-
-        if (special) {
-            combo = modif + special;
-        } else {
-            combo = modif + (hasShift ? (shiftNums[character] || character.toUpperCase()) : character);
-        }
-
-        if (modif) {
-            combo += '>';
-        } else if (special && combo.length > 1) {
-            combo = '<' + combo + '>';
-        } else if (special && combo.length == 1) {
-            special = '';
-        }
-
-        console.info('combo', edata.type, special, combo);
-        if (isInputSource) {
-            if (!modifiers[combo] && !special) {
-                return combo;
-            }
-        } else {
-            if (edata.type == 'keypress' || (!special && combo[0] == '<')) {
-                return combo;
-            }
-        }
-
-        return '';
-
-    }
 
     chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
         return;

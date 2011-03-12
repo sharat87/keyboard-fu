@@ -116,7 +116,7 @@ jQuery(function ($) {
     };
 
     // Key binding functionality
-    $(document).bind('keydown keypress', function (e) {
+    function keyHandler(e) {
 
         // Don't fire in text-accepting inputs that we didn't directly bind to
         if (this !== e.target && (/textarea|select/i.test(e.target.nodeName) || /text|password/i.test(e.target.type) ||
@@ -133,20 +133,13 @@ jQuery(function ($) {
             return;
         }
 
-        var edata = {
-            type: e.type,
-            which: e.which,
-            shiftKey: e.shiftKey,
-            ctrlKey: e.ctrlKey,
-            altKey: e.altKey,
-            metaKey: e.metaKey
-        };
+        var combo = readKeyCombo(e);
+        combo && checkAndPush(combo);
 
-        chrome.extension.sendRequest({ action: 'readKeyCombo', edata: edata, isInputSource: false }, function (combo) {
-            combo && checkAndPush(combo);
-        });
+    }
 
-    });
+    document.addEventListener('keydown', keyHandler);
+    document.addEventListener('keypress', keyHandler);
 
     function executeAction(keyc) {
         (new Function('with (this) { ' + keyComboMap[keyc].code + ' }')).call(mask);

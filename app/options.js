@@ -30,7 +30,9 @@ jQuery(function ($) {
     function loadKeyForm(id) {
         
         var keyBoxMarkup = '<input type=hidden class=id-input value=' + (id || nextId) + ' />' +
-                '<label><span class=title>Hotkey</span><input type=text class="keyc-input text" data-keyc="" /><a href="#" class=keyc-clear-btn>Clear</a></label>' +
+                // '<label><span class=title>Hotkey</span><input type=text class="keyc-input text" data-keyc="" /><a href="#" class=keyc-clear-btn>Clear</a></label>' +
+                '<label><span class=title>Hotkey</span><span type=text class="keyc-display text" data-keyc=""></span></label>' +
+                    '<button class=keyc-capture-btn>Capture</button><button class=keyc-uncapture-btn style=display:none>Done</button><button class=keyc-clear-btn>Clear</button>' +
                 '<label><span class=title>Description</span><input type=text class="desc-input text" /></label>' +
                 '<label><span class=title>Code to execute</span><textarea rows=10 class="code-input text" /></label>' +
                 '<label><span class=title>Url filter (Global filters will be added to the end of this list)</span><textarea rows=7 class="filters-input text" /> one pattern per line';
@@ -39,7 +41,7 @@ jQuery(function ($) {
 
         if (id) {
             var keyData = hotkeys[id];
-            keyForm.find('input.keyc-input').val(keyData.keyc).data('keyc', keyData.keyc);
+            keyForm.find('span.keyc-display').text(keyData.keyc);
             keyForm.find('input.desc-input').val(keyData.desc);
             keyForm.find('textarea.code-input').val(keyData.code);
             keyForm.find('textarea.filters-input').val(keyData.filters.join('\n'));
@@ -62,41 +64,40 @@ jQuery(function ($) {
         loadKeyForm();
     });
 
+    var keycCapture = false;
+
+    function keyHandler(e) {
+
+        console.info('key event:', e.type, e);
+        if (!keycCapture) return;
+
+        e.stopPropagation();
+
+        // ESC key
+        if (e.which == 27) {
+            return;
+        }
+
+        keyForm.find('span.keyc-display').text(function (i, oldVal) {
+            return oldVal + readKeyCombo(e);
+        });
+
+    }
+
+    document.addEventListener('keydown', keyHandler);
+    document.addEventListener('keypress', keyHandler);
+
     keyForm
-        .delegate('input.keyc-input', 'keydown keypress keyup', function (e) {
-
-            e.stopPropagation();
-            e.preventDefault();
-
-            console.info('key event:', e.type, e);
-            if (e.type == 'keyup') return;
-
-            // ESC key
-            if (e.which == 27) {
-                return;
-            }
-
-            var th = $(this);
-
-            var edata = {
-                type: e.type,
-                which: e.which,
-                shiftKey: e.shiftKey,
-                ctrlKey: e.ctrlKey,
-                altKey: e.altKey,
-                metaKey: e.metaKey
-            };
-
-            chrome.extension.sendRequest({ action: 'readKeyCombo', edata: edata, isInputSource: true }, function (combo) {
-                var totalCombo = th.data('keyc') + combo;
-                th.data('keyc', totalCombo);
-                th.val(totalCombo);
-            });
-
+        .delegate('button.keyc-capture-btn', 'click', function (e) {
+            keycCapture = true;
+            $(this).hide().next().show();
+        })
+        .delegate('button.keyc-uncapture-btn', 'click', function (e) {
+            keycCapture = false;
+            $(this).hide().prev().show();
         })
         .delegate('a.keyc-clear-btn', 'click', function (e) {
-            $(this).siblings('input.keyc-input').val('').data('keyc', '');
-            e.preventDefault();
+            keyForm.find('span.keyc-display').text('');
         });
 
     $('#saveKeyBtn').click(function (e) {

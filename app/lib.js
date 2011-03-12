@@ -1,4 +1,4 @@
-function readKeyCombo(e) {
+function readKeyCombo(e, preventDefault) {
 
     var keyChar = "";
 
@@ -35,7 +35,7 @@ function readKeyCombo(e) {
         // handle modifiers being pressed.don't handle shiftKey alone (to avoid / being interpreted as ?
         if (e.metaKey && e.keyCode > 31 || e.ctrlKey && e.keyCode > 31 || e.altKey && e.keyCode > 31) {
 
-            e.preventDefault();
+            preventDefault && e.preventDefault();
 
             // Not a letter
             if (e.keyIdentifier.slice(0, 2) != "U+") {

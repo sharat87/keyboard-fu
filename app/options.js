@@ -73,7 +73,7 @@ jQuery(function ($) {
         e.stopPropagation();
 
         keyForm.find('span.keyc-display').text(function (i, oldVal) {
-            return oldVal + readKeyCombo(e);
+            return oldVal + readKeyCombo(e, true);
         });
 
     }

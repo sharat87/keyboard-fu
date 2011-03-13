@@ -78,7 +78,7 @@ jQuery ($) ->
     keyHandler = (e) ->
 
         # Don't fire in text-accepting inputs that we didn't directly bind to
-        return if this isnt e.target and (/textarea|select/i.test e.target.nodeName or /text|password/i.test e.target.type or
+        return if this isnt e.target and (/textarea|select/i.test(e.target.nodeName) or /text|password/i.test(e.target.type) or
                                   typeof $(e.target).attr('contenteditable') isnt 'undefined')
 
         # ESC key

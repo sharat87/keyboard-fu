@@ -7,12 +7,16 @@ then
 fi
 
 mkdir _pkg
-for f in app css doc res background.html options.html manifest.json
+for f in src css doc res background.html options.html manifest.json
 do
     cp -R $f _pkg
 done
 cd _pkg
 
+# Add `-w` and run the following command while developing
+coffee -o js src
+
+rm -Rf src
 rm -Rf res/*.xcf
 
 file ../keyboard-fu.zip && rm ../keyboard-fu.zip

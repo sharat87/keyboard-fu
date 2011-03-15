@@ -1,14 +1,8 @@
-_console = ->
+log = ->
 
-    _log = (fn) -> (args...) ->
-        chrome.extension.sendRequest action: 'console', fn: fn, args: args
+    chrome.extension.sendRequest action: 'console', fn: 'info', args: arguments
 
-    {
-        log: _log 'log'
-        info: _log 'info'
-        debug: _log 'debug'
-        error: _log 'error'
-    }
+@cs = {}
 
 jQuery ($) ->
 
@@ -19,6 +13,7 @@ jQuery ($) ->
         'window'
         'document'
         'chrome'
+        'cs'
     ]
 
     for v in maskVars
@@ -26,7 +21,7 @@ jQuery ($) ->
 
     chrome.extension.sendRequest { action: 'getHotkeys' }, (hotkeys) ->
 
-        console.info('got hotkeys')
+        log 'got hotkeys'
         loc = window.location.toString()
 
         $.each hotkeys, (id, keyData) ->
@@ -39,21 +34,21 @@ jQuery ($) ->
 
                 for pat in allFilters
                     isNegativePattern = pat[0] is '-'
-                    console.info 'matching with pattern', pat
+                    log 'matching with pattern', pat
                     pat = pat[1..] if isNegativePattern
                     re = new RegExp globToRegex pat
-                    console.info 'regex is', re
+                    log 'regex is', re
                     if loc.match re
                         allow = not isNegativePattern
                         break
 
                 if not allow
-                    console.info('allow is false')
+                    log 'allow is false'
                     return
 
                 keyData.id = id
                 keyComboMap[keyData.keyc] = keyData
-                console.info('combo map', keyData.keyc, keyData)
+                log 'combo map', keyData.keyc, keyData
 
     keyQueue =
 
@@ -100,14 +95,14 @@ jQuery ($) ->
 
     checkAndPush = (combo) ->
 
-        console.info('checkAndPush', combo)
+        log 'checkAndPush', combo
 
         totalCombo = keyQueue.q + combo
 
         # Invalidate the last started timer to clear the queue, if any
         keyExpiryCode++
 
-        console.info('totalCombo', totalCombo)
+        log 'totalCombo', totalCombo
 
         # Check if we have a valid prefix, if so, add it to the queue and
         # start a timer to clear it
@@ -123,13 +118,22 @@ jQuery ($) ->
                 return if keyExpiryCode isnt _keyExpiryCode
                 executeAction(keyQueue.q) if keyQueue.q of keyComboMap
                 keyQueue.clear()
-                console.info('emptied keyQueue')
+                log 'emptied keyQueue'
             )(keyExpiryCode), 2200)
         else
             if totalCombo of keyComboMap
                 # If we have a complete key combination, execute it and clear the queue
-                console.info('executing', totalCombo)
+                log 'executing', totalCombo
                 executeAction(totalCombo)
             keyQueue.clear()
 
-        console.info('key queue', keyQueue.q)
+        log 'key queue', keyQueue.q
+
+    refElem = null
+    cs.toggleKeyReference = ->
+        if refElem is null
+            refElem = $('<div id=fuKeyRef style=display:none />').appendTo 'body'
+
+            refElem.html('hella stupid')
+
+        refElem.toggle()

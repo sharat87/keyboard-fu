@@ -138,11 +138,6 @@ code, pre, tt, textarea {
     width: 45%;
 }
 
-#docBox {
-    text-shadow: 0 1px rgba(66, 162, 255, .3);
-    padding: 3px 10px 20px;
-}
-
 #ieBox textarea {
     background: #F0F0FF;
     font-size: .8em;

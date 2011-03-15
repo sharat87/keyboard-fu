@@ -50,15 +50,27 @@ jQuery ($) ->
             keyStore.dumpGlobalFilters request.filters
             sendResponse ok: true
 
-        openOptionsPage: (request, sender, sendResponse) ->
-            target = request.target
-            url = chrome.extension.getURL 'options.html'
+        open: (request, sender, sendResponse) ->
+            { resource, target, location } = request
+
+            url = switch resource
+                      when '!parent'
+                          location.replace(/\/[^\/]+\/?/, '')
+                      when '!fu-options'
+                          chrome.extension.getURL 'options.html'
+                      when '!extensions'
+                          'chrome://extensions'
+                      when '!chrome-options'
+                          'chrome://settings'
+                      else
+                          resource
+
             if target is 'here'
-                window.location = url
+                sendResponse { url }
             else if target is 'window'
-                chrome.windows.create url: url
+                chrome.windows.create { url }
             else
-                chrome.tabs.create url: url
+                chrome.tabs.create { url }
 
         tabSwitchBy: (request, sender, sendResponse) ->
             console.info 'tabSwitch request made'

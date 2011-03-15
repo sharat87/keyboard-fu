@@ -122,9 +122,8 @@ $('#bottomControls').delegate 'a', 'click', (e) ->
     e.preventDefault()
     keyList.find('a.selected').removeClass('selected')
 
-docBox = $('#docBox').load('doc/api.html')
 $('#docBtn').click  (e) ->
-    docBox.show().siblings('div.box').hide()
+    window.open chrome.extension.getURL('docs/api.html')
 
 ieBox = $('#ieBox')
 ieBox.delegate '.import-btn', 'click', (e) ->

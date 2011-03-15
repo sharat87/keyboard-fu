@@ -17,3 +17,18 @@
 #keyboardFuQueue.active {
     display: block;
 }
+
+#fuKeyRef {
+    background: black;
+    color: white;
+    padding: 3px 5px;
+    -webkit-border-radius: 3px;
+    position: fixed;
+    top: 30px;
+    right: 5%;
+    left: 5%;
+    min-height: 120px;
+    z-index: 9999999;
+    opacity: .85;
+    -webkit-box-shadow: 0 2px 50px rgba(0, 0, 0, .7);
+}

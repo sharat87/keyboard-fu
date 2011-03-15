@@ -1,59 +1,77 @@
 body = $ 'body'
 
+# The fu object, that currently holds all of the API functions. It may be split
+# into more diverse categorical objects later on.
 @fu =
 
-    openOptionsPage: (target) ->
-        console.info 'opening options page from fu'
-        chrome.extension.sendRequest action: 'openOptionsPage', target: target
+    # Open the page given by `resource` in the `target`, which can be `here`, `window`, or `tab` (default)
+    # `resource` can be `!options` or any other url
+    open: (resource, target='tab') ->
+        log 'opening options page from fu'
+        location = window.location.toString()
+        chrome.extension.sendRequest { action: 'open', resource, target, location }, (response) ->
+            window.location = response.url
 
-    openParentPage: ->
-        console.info 'open parent page from fu'
-        window.location = window.location.toString().replace(/\/[^\/]+\/?/, '')
+    toggleKeyReference: ->
+        log 'toggle key reference from fu'
+        cs.toggleKeyReference()
 
+    # Scroll down ``pixels`` pixels (default 100), in ``time`` milliseconds (default 150). Give time as 0, to bypass animation.
     scrollDown: (size=100, time=150) ->
-        console.info 'scroll down from fu'
+        log 'scroll down from fu'
         body.animate { scrollTop: body.scrollTop() + size }, time
 
+    # Scroll up ``pixels`` pixels (default 100), in ``time`` milliseconds (default 150). Give time as 0, to bypass animation.
     scrollUp: (size=100, time=150) ->
-        console.info 'scroll up from fu'
+        log 'scroll up from fu'
         body.animate { scrollTop: body.scrollTop() - size }, time
 
+    # Scroll right ``pixels`` pixels (default 70), in ``time`` milliseconds (default 120). Give time as 0, to bypass animation.
     scrollRight: (size=70, time=120) ->
-        console.info 'scroll right from fu'
+        log 'scroll right from fu'
         body.animate { scrollLeft: body.scrollLeft() + size }, time
 
+    # Scroll left ``pixels`` pixels (default 70), in ``time`` milliseconds (default 120). Give time as 0, to bypass animation.
     scrollLeft: (size=70, time=120) ->
-        console.info 'scroll left from fu'
+        log 'scroll left from fu'
         body.animate { scrollLeft: body.scrollLeft() - size }, time
 
+    # Scroll to the top of the page in ``time`` milliseconds (default 150). Give time as 0, to bypass animation.
     scrollToTop: (time=150) ->
-        console.info 'scroll to top from fu'
+        log 'scroll to top from fu'
         body.animate { scrollTop: 0 }, time
 
+    # Scroll to the bottom of the page in ``time`` milliseconds (default 150). Give time as 0, to bypass animation.
     scrollToBottom: (time=150) ->
-        console.info 'scroll to bottom from fu'
+        log 'scroll to bottom from fu'
         body.animate { scrollTop: body.height() }, time
 
+    # Go to the next tab.
     tabNext: ->
-        console.info 'next tab from fu'
+        log 'next tab from fu'
         chrome.extension.sendRequest action: 'tabSwitchBy', count: 1
 
+    # Go to the previous tab.
     tabPrevious: ->
-        console.info 'previous tab from fu'
+        log 'previous tab from fu'
         chrome.extension.sendRequest action: 'tabSwitchBy', count: -1
 
+    # Move current tab to the right.
     tabRight: ->
-        console.info 'move tab to right from fu'
+        log 'move tab to right from fu'
         chrome.extension.sendRequest action: 'tabMoveBy', count: 1
 
+    # Move current tab to the left.
     tabLeft: ->
-        console.info 'move tab to left from fu'
+        log 'move tab to left from fu'
         chrome.extension.sendRequest action: 'tabMoveBy', count: -1
 
+    # Close the current tab.
     tabClose: ->
-        console.info 'close tab from fu'
+        log 'close tab from fu'
         chrome.extension.sendRequest action: 'tabClose'
 
+    # Undo closing of last tab.
     tabUndoClose: ->
-        console.info 'undo close tab from fu'
+        log 'undo close tab from fu'
         chrome.extension.sendRequest action: 'tabUndoClose'

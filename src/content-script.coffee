@@ -1,4 +1,4 @@
-log = ->
+@log = ->
 
     chrome.extension.sendRequest action: 'console', fn: 'info', args: arguments
 
@@ -78,7 +78,14 @@ jQuery ($) ->
 
         # ESC key
         if e.which is 27
-            keyQueue.clear()
+            if keyQueue.q.length > 0
+                keyQueue.clear()
+                return
+
+            fuPopups = $('div.fu-popup:visible')
+            if fuPopups.length > 0
+                fuPopups.hide()
+
             return
 
         combo = readKeyCombo(e)
@@ -132,8 +139,12 @@ jQuery ($) ->
     refElem = null
     cs.toggleKeyReference = ->
         if refElem is null
-            refElem = $('<div id=fuKeyRef style=display:none />').appendTo 'body'
+            refElem = $('<div id=fuKeyRef class=fu-popup style=display:none />').appendTo 'body'
+            markup = ''
 
-            refElem.html('hella stupid')
+            for keyc, kdata of keyComboMap
+                markup += "<div class=fu-key-item><span class=fu-refbox-desc>#{kdata.desc}</span><code class=fu-refbox-keyc>#{htmlentities keyc}</code></div>"
+
+            refElem.html(markup)
 
         refElem.toggle()

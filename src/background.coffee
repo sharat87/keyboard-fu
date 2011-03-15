@@ -108,11 +108,11 @@ jQuery ($) ->
             12: { keyc: 'M', desc: 'Move tab right', code: 'fu.tabRight()', filters: [] }
             13: { keyc: '<C-x>', desc: 'Close tab', code: 'fu.tabClose()', filters: [] }
             14: { keyc: 'u', desc: 'Undo close tab', code: 'fu.tabUndoClose()', filters: [] }
-            15: { keyc: 'go', desc: 'Open Keyboard-fu options page', code: 'fu.openOptionsPage("newTab")', filters: [] }
+            15: { keyc: 'go', desc: 'Open Keyboard-fu options page', code: 'fu.open("!fu-options")', filters: [] }
             16: { keyc: 'o', desc: 'Go back', code: 'history.back()', filters: [] }
             17: { keyc: 'i', desc: 'Go forward', code: 'history.forward()', filters: [] }
-            18: { keyc: 'gu', desc: 'Go up in the url', code: 'fu.openParentPage()', filters: [] }
-            19: { keyc: 't', desc: 'Just a test', code: 'alert(\'passed\')', filters: ['http:#*.google.com/*'] }
+            18: { keyc: 'gu', desc: 'Go up in the url', code: 'fu.open("!parent")', filters: [] }
+            19: { keyc: '?', desc: 'Toggle help box', code: 'fu.toggleKeyReference()', filters: ['http:#*.google.com/*'] }
 
         # Storage data strucutre:
         # Eack hotkey is an array of the form,

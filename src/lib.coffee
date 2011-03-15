@@ -82,13 +82,13 @@
         if e.keyCode > 31
             keyChar = String.fromCharCode e.charCode
 
-    console.info 'key char', keyChar
+    log 'key char', keyChar
     keyChar
 
 # Gives a string that is a regex representation of the given glob pattern
 @globToRegex = (line) ->
 
-    console.info "got line [" + line + "]"
+    log "got line [" + line + "]"
     line = $.trim line
     
     sb = []

@@ -1,7 +1,3 @@
-@log = ->
-
-    chrome.extension.sendRequest action: 'console', fn: 'info', args: arguments
-
 @cs = {}
 
 jQuery ($) ->

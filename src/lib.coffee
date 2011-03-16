@@ -1,3 +1,7 @@
+@log = (args...) ->
+
+    chrome.extension.sendRequest action: 'console', fn: 'info', args
+
 @readKeyCombo = (e, preventDefault) ->
 
     keyChar = ""

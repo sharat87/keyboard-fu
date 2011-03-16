@@ -1,6 +1,6 @@
 {
     "name": "Keyboard-fu",
-    "version": "0.3",
+    "version": "0.3.1",
     "description": "Super customizable keyboard shortcuts for just the necessities",
     "icons": {
         "16": "res/logo-16.png",

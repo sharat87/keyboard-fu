@@ -7,7 +7,7 @@ then
 fi
 
 mkdir _pkg
-for f in src css res background.html options.html manifest.json
+for f in src css res vendor background.html options.html manifest.json
 do
     cp -R $f _pkg
 done

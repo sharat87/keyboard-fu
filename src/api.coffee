@@ -7,9 +7,14 @@ body = $ 'body'
     # Open the page given by `resource` in the `target`, which can be `here`, `window`, or `tab` (default)
     # `resource` can be `!options` or any other url
     open: (resource, target='tab') ->
-        log 'opening options page from fu'
+        log 'opening resource page from fu'
         location = window.location.toString()
         chrome.extension.sendRequest { action: 'open', resource, target, location }, (response) ->
+            window.location = response.url
+
+    openBookmark: (searchString, target={ http: 'tab', https: 'tab', javascript: 'here' }) ->
+        log 'opening bookmark from fu'
+        chrome.extension.sendRequest { action: 'openBookmark', searchString, target }, (response) ->
             window.location = response.url
 
     toggleKeyReference: ->

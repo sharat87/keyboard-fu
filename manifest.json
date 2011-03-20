@@ -9,7 +9,7 @@
     },
     "permissions": [
         "http://*/*", "https://*/*",
-        "tabs"
+        "tabs", "bookmarks"
     ],
     "background_page": "background.html",
     "options_page": "options.html",

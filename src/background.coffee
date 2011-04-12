@@ -72,6 +72,54 @@ jQuery ($) ->
             else
                 chrome.tabs.create { url }
 
+        openBookmark: (request, sender, sendResponse) ->
+            console.info 'openBookmark request made'
+            chrome.bookmarks.search request.name, (marks) ->
+                url = null
+                for mark in marks
+                    if mark.title == request.name
+                        url = mark.url
+                        break
+
+                if url?
+                    sendResponse { url }
+                else
+                    alert "The bookmark '#{request.name}' does not exist or does not have a valid url"
+
+        openBookmarkByPath: (request, sender, sendResponse) ->
+            console.info 'openBookmarkByPath request made'
+
+            pathItems = request.name.split '/'
+            console.info 'pathItems is', pathItems
+
+            chrome.bookmarks.getTree (nodes) ->
+
+                currentNodeList = nodes
+                nodeToOpen = null
+
+                while pathItems.length
+                    item = pathItems.shift()
+                    found = no
+
+                    for n in currentNodeList
+                        if n.title is item
+                            found = yes
+                            if pathItems.length is 0
+                                nodeToOpen = n
+                            else
+                                currentNodeList = n.children
+                                break
+
+                    unless found
+                        alert "The bookmark '#{request.name}' does not exist or does not have a valid url"
+
+                unless nodeToOpen?
+                    alert "Bookmark '#{request.name}' could not be found"
+                    return
+
+                sendResponse url: nodeToOpen.url
+
+
         tabSwitchBy: (request, sender, sendResponse) ->
             console.info 'tabSwitch request made'
             tabSwitchBy request.count

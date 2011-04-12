@@ -12,9 +12,10 @@ body = $ 'body'
         chrome.extension.sendRequest { action: 'open', resource, target, location }, (response) ->
             window.location = response.url
 
-    openBookmark: (searchString, target={ http: 'tab', https: 'tab', javascript: 'here' }) ->
+    # Open a bookmark given by the name, in the given target.
+    openBookmark: (name, target={ http: 'tab', https: 'tab', javascript: 'here' }) ->
         log 'opening bookmark from fu'
-        chrome.extension.sendRequest { action: 'openBookmark', searchString, target }, (response) ->
+        chrome.extension.sendRequest { action: 'openBookmarkByPath', name, target }, (response) ->
             window.location = response.url
 
     toggleKeyReference: ->

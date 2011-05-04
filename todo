@@ -1,4 +1,7 @@
 BUGZ:
+Undo closed tab does not remember the place of the closed tab
+Opening options page throught API opens a new tab with options, even if an options tab is already open
+history.back and history.forward don't integrate with the native back/forward buttons... sometimes
 Bold/Italic faces of Puritan not available
 
 [done] Global or per-hotkey url black lists. Don't want these hotkeys on sites like gmail or jira.
@@ -11,12 +14,9 @@ Bold/Italic faces of Puritan not available
     load it.
 
 Add Bespin/Skywriter to the javascript code editing experience
-Show the app version in options page
-    Or have an About page
 
 APIs
 A help popup with all hotkeys
-Open new tab + Open new tab last
 Page actions (
     Back=history.back, 
     Forward=history.forward, 
@@ -24,4 +24,3 @@ Page actions (
     Up, 
     View Source
 )
-Opening Bookmarks/Bookmarklets or any other arbitrary url

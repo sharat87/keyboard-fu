@@ -55,7 +55,8 @@ jQuery ($) ->
 
             url = switch resource
                       when '!parent'
-                          location.replace(/\/[^\/]+\/?/, '')
+                          target or= 'here'
+                          location.replace(/\/[^\/]+\/?$/, '')
                       when '!fu-options'
                           chrome.extension.getURL 'options.html'
                       when '!extensions'
@@ -89,7 +90,7 @@ jQuery ($) ->
         openBookmarkByPath: (request, sender, sendResponse) ->
             console.info 'openBookmarkByPath request made'
 
-            pathItems = request.name.split '/'
+            pathItems = request.location.split '/'
             console.info 'pathItems is', pathItems
 
             chrome.bookmarks.getTree (nodes) ->
@@ -117,8 +118,19 @@ jQuery ($) ->
                     alert "Bookmark '#{request.name}' could not be found"
                     return
 
-                sendResponse url: nodeToOpen.url
+                url = nodeToOpen.url
 
+                if url[..10] is 'javascript:'
+                    chrome.tabs.executeScript null, code: unescape url[11..]
+                else if target is 'here'
+                    sendResponse { url }
+                else if target is 'window'
+                    chrome.windows.create { url }
+                else
+                    chrome.tabs.create { url }
+
+        openNewTab: (request, sender, sendResponse) ->
+            chrome.tabs.create {}
 
         tabSwitchBy: (request, sender, sendResponse) ->
             console.info 'tabSwitch request made'
@@ -160,7 +172,8 @@ jQuery ($) ->
             16: { keyc: 'o', desc: 'Go back', code: 'history.back()', filters: [] }
             17: { keyc: 'i', desc: 'Go forward', code: 'history.forward()', filters: [] }
             18: { keyc: 'gu', desc: 'Go up in the url', code: 'fu.open("!parent")', filters: [] }
-            19: { keyc: '?', desc: 'Toggle help box', code: 'fu.toggleKeyReference()', filters: ['http:#*.google.com/*'] }
+            19: { keyc: 'gs', desc: 'View source of current page', code: 'fu.viewSource()', filters: [] }
+            20: { keyc: '?', desc: 'Toggle help box', code: 'fu.toggleKeyReference()', filters: ['http:#*.google.com/*'] }
 
         # Storage data strucutre:
         # Eack hotkey is an array of the form,

@@ -6,18 +6,31 @@ body = $ 'body'
 
     # Open the page given by `resource` in the `target`, which can be `here`, `window`, or `tab` (default)
     # `resource` can be `!options` or any other url
-    open: (resource, target='tab') ->
+    open: (resource, target) ->
         log 'opening resource page from fu'
         location = window.location.toString()
         chrome.extension.sendRequest { action: 'open', resource, target, location }, (response) ->
             window.location = response.url
 
-    # Open a bookmark given by the name, in the given target.
-    openBookmark: (name, target={ http: 'tab', https: 'tab', javascript: 'here' }) ->
+    # Open a bookmark(let) given by the its full path, in the given target.
+    # 
+    # The `location` should be a full path to the bookmark or bookmarklet. Like so
+    #
+    #    `'/Bookmarks Bar/Keyboard fu extension'`
+    # 
+    # would refer to the bookmark called *Keyboard fu extension* in the bookmarks bar.
+    # You can visualize the locations of bookmarks from the bookmarks manager.
+    openBookmarkByPath: (location, target='tab') ->
         log 'opening bookmark from fu'
-        chrome.extension.sendRequest { action: 'openBookmarkByPath', name, target }, (response) ->
+        chrome.extension.sendRequest { action: 'openBookmarkByPath', location, target }, (response) ->
             window.location = response.url
 
+    # Open a new tab
+    openNewTab: ->
+        log 'opening new tag from fu'
+        chrome.extension.sendRequest action: 'openNewTab'
+
+    # Show/hide the quick reference popup for the available hotkeys. Experimental.
     toggleKeyReference: ->
         log 'toggle key reference from fu'
         cs.toggleKeyReference()

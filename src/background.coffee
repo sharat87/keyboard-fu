@@ -132,6 +132,15 @@ jQuery ($) ->
         openNewTab: (request, sender, sendResponse) ->
             chrome.tabs.create {}
 
+        viewSource: ->
+            sourceUrl = location.toString().replace(new RegExp('^' + location.protocol + '//'), 'view-source:')
+            console.info 'source url', sourceUrl
+
+            chrome.tabs.getSelected null, (tab) ->
+                chrome.tabs.create
+                    index: tab.index + 1
+                    url: sourceUrl
+
         tabSwitchBy: (request, sender, sendResponse) ->
             console.info 'tabSwitch request made'
             tabSwitchBy request.count

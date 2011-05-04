@@ -25,6 +25,10 @@ body = $ 'body'
         chrome.extension.sendRequest { action: 'openBookmarkByPath', location, target }, (response) ->
             window.location = response.url
 
+    viewSource: ->
+        log 'opening source page'
+        chrome.extension.sendRequest { action: 'viewSource' }
+
     # Open a new tab
     openNewTab: ->
         log 'opening new tag from fu'

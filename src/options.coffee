@@ -122,8 +122,8 @@ $('#bottomControls').delegate 'a', 'click', (e) ->
     e.preventDefault()
     keyList.find('a.selected').removeClass('selected')
 
-$('#docBtn').click  (e) ->
-    window.open chrome.extension.getURL('docs/api.html')
+$('a[target=_blank]').click  (e) ->
+    window.open chrome.extension.getURL($(this).attr('href'))
 
 ieBox = $('#ieBox')
 ieBox.delegate '.import-btn', 'click', (e) ->

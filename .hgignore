@@ -1,4 +1,4 @@
 syntax: glob
-js
-docs
-keyboard-fu.zip
+chrome-app
+key-fu.zip
+*.pyc

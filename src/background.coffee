@@ -149,7 +149,8 @@ jQuery ($) ->
         tabUndoClose: (request, sender, sendResponse) ->
             console.info 'tabUndoClose request made'
             if allClosedTabs.length
-                chrome.tabs.create url: allClosedTabs.pop()
+                {url, index} = allClosedTabs.pop()
+                chrome.tabs.create { url, index }
 
     keyStore =
 
@@ -233,7 +234,8 @@ jQuery ($) ->
                         chrome.tabs.update tab.id, { selected: true }
                         break
 
-    # Spying on closed tabs. Code stolen from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
+    # Spying on closed tabs.
+    # Part of the following code stolen from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
     # Listener on update.
     allOpenTabs = {}
     allClosedTabs = []
@@ -246,4 +248,8 @@ jQuery ($) ->
         return if tabId not of allOpenTabs
         tabInfo = allOpenTabs[tabId]
         delete allOpenTabs[tabId]
-        allClosedTabs.push(tabInfo.url)
+        allClosedTabs.push(tabInfo)
+
+    chrome.tabs.getAllInWindow null, (tabs) ->
+        for t in tabs
+            allOpenTabs[t.id] = t

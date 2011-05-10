@@ -4,6 +4,8 @@
 
 @readKeyCombo = (e, preventDefault) ->
 
+    console.info 'reading', e
+
     keyChar = ""
 
     keyCodes = { ESC: 27, backspace: 8, deleteKey: 46, enter: 13, space: 32, shiftKey: 16, f1: 112, f12: 123}

@@ -60,6 +60,7 @@ keyHandler = (e) ->
     return unless keycCapture
 
     e.stopPropagation()
+    console.info 'capture', e
 
     keyForm.find('span.keyc-display').text (i, oldVal) ->
         return oldVal + readKeyCombo(e, yes)

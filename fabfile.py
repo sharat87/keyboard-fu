@@ -27,7 +27,7 @@ def build(f=None):
         lessc(f, os.path.split(f.replace('.less', '.css'))[1])
 
     local('docco src/api.coffee')
-    local('markdown -f docs/usage.html usage.mkd')
+    local('markdown_py -f docs/usage.html usage.mkd')
 
     if os.path.exists('chrome-app/docs'):
         local('rm -Rf chrome-app/docs')
@@ -53,6 +53,7 @@ def watch():
 
     globs_to_watch = [
         'manifest.json',
+        'usage.mkd',
         'src/*.coffee',
         'styles/*.less',
     ]

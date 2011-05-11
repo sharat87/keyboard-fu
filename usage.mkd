@@ -76,6 +76,12 @@ in the left side of the options page. The API is still evolving and does not
 have everything under the sky. If you think something could be added to the
 API, please let me know.
 
+In addition of the API provided by Keyboard-fu, jQuery 1.5.1 is also available
+for these code snippets. You may use this to do all sorts of DOM manipulations
+or various ajax calls etc. Oh, and you don't need to wrap your code in the
+jQuery's ready event, if you're wondering, because by the time the hotkeys are
+loaded, the ready event will have fired.
+
 # Known problems/Caveats
 
 ## Problems
@@ -118,11 +124,11 @@ extension](https://chrome.google.com/webstore/detail/cafiohcgicchdfciefpbjjgigbm
 Keyboard-fu is released with the MIT license,
 
 > Copyright (c) 2011 Shrikant Sharat Kandula.
-
+>
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
 > in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 > copies of the Software, and to permit persons to whom the Software is
 > furnished to do so, subject to the following conditions:
 > 

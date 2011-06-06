@@ -90,7 +90,9 @@ jQuery ($) ->
         openBookmarkByPath: (request, sender, sendResponse) ->
             console.info 'openBookmarkByPath request made'
 
-            pathItems = request.location.split '/'
+            {location, target} = request
+
+            pathItems = location.split '/'
             console.info 'pathItems is', pathItems
 
             chrome.bookmarks.getTree (nodes) ->
@@ -174,7 +176,8 @@ jQuery ($) ->
             17: { keyc: 'i', desc: 'Go forward', code: 'history.forward()', filters: [] }
             18: { keyc: 'gu', desc: 'Go up in the url', code: 'fu.open("!parent")', filters: [] }
             19: { keyc: 'gs', desc: 'View source of current page', code: 'fu.viewSource()', filters: [] }
-            20: { keyc: '?', desc: 'Toggle help box', code: 'fu.toggleKeyReference()', filters: ['http:#*.google.com/*'] }
+            20: { keyc: 'gf', desc: 'Toggle Keyboard-fu in current tab', code: 'fu.toggleKeyboardFu()', filters: [] }
+            21: { keyc: '?', desc: 'Toggle help box', code: 'fu.toggleKeyReference()', filters: ['http:#*.google.com/*'] }
 
         # Storage data strucutre:
         # Eack hotkey is an array of the form,

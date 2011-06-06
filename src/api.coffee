@@ -35,6 +35,11 @@ body = $ 'body'
         log 'toggle key reference from fu'
         cs.toggleKeyReference()
 
+    # Disable/Enable Keyboard-fu in current tab
+    toggleKeyboardFu: ->
+        log 'toggle keyboard-fu from fu'
+        cs.toggleKeyboardFu()
+
     # Scroll down ``pixels`` pixels (default 100), in ``time`` milliseconds (default 150). Give time as 0, to bypass animation.
     scrollDown: (size=100, time=150) ->
         log 'scroll down from fu'

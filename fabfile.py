@@ -26,13 +26,13 @@ def build(f=None):
     for f in glob('styles/*.less'):
         lessc(f, os.path.split(f.replace('.less', '.css'))[1])
 
-    # local('docco src/api.coffee')
-    # local('markdown_py -f docs/usage.html usage.mkd')
+    local('pycco src/api.coffee')
+    local('markdown_py -f docs/usage.html usage.mkd')
 
-    # if os.path.exists('chrome-app/docs'):
-    #     local('rm -Rf chrome-app/docs')
+    if os.path.exists('chrome-app/docs'):
+        local('rm -Rf chrome-app/docs')
 
-    # local('mv docs chrome-app')
+    local('mv docs chrome-app')
 
 def chrome():
 
@@ -47,7 +47,8 @@ def pack():
     if os.path.exists('key-fu.zip'):
         local('rm key-fu.zip')
 
-    local('zip -r key-fu.zip chrome-app/*')
+    with lcd('chrome-app'):
+        local('zip -r ../key-fu.zip ./*')
 
 def watch():
 

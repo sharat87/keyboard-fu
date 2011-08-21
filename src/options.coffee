@@ -114,7 +114,8 @@ $('#globalFiltersBtn').click (e) ->
     globalFilterBox.show().siblings('div.box').hide()
 
 $('#globalFilterSaveBtn').click (e) ->
-    chrome.extension.sendRequest { action: 'setGlobalFilters', filters: $('#globalFilterInput').val() }, (response) ->
+    th = $ this
+    chrome.extension.sendRequest { action: 'setGlobalFilters', filters: $('#globalFilterInput').val().split('\n') }, (response) ->
         loadGlobalFilters()
         msg = if response.ok then '<span>Saved successfully.</span>' else '<span>Saving failed. Please try again later.</span>'
         th.after(msg).next().delay(2000).fadeOut(1000)

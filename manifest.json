@@ -1,6 +1,6 @@
 {
     "name": "Keyboard-fu",
-    "version": "0.5.4",
+    "version": "0.5.6",
     "description": "An extremely customizable keyboard shortcuts interface that aims to rid you of the rodent :)",
     "icons": {
         "16": "res/logo-16.png",

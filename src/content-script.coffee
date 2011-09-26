@@ -1,6 +1,6 @@
 @log = (args...) ->
 
-    chrome.extension.sendRequest action: 'console', fn: 'info', args
+    chrome.extension.sendRequest { action: 'console', fn: 'info', args }
 
 @cs = {}
 

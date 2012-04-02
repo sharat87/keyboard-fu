@@ -95,7 +95,7 @@ body = $ 'body'
         log 'close tab from fu'
         chrome.extension.sendRequest action: 'tabClose'
 
-    # Close all but the current tab
+    # Close all but the current tab.
     tabCloseOther: ->
         log 'close other tabs from fu'
         chrome.extension.sendRequest action: 'tabCloseOther'

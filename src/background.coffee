@@ -149,6 +149,7 @@ jQuery ($) ->
                 chrome.tabs.remove(tab.id)
 
         tabCloseOther: (request, sender, sendResponse) ->
+            console.info 'tabCloseOther request made'
             chrome.tabs.getSelected null, (tab) ->
                 chrome.tabs.getAllInWindow tab.windowId, (tabs) ->
                     tabids = (t.id for t in tabs when t.id isnt tab.id)

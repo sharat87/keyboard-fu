@@ -27,7 +27,7 @@ def build(f=None):
         lessc(f, os.path.split(f.replace('.less', '.css'))[1])
 
     local('pycco src/api.coffee')
-    local('markdown -f docs/usage.html usage.mkd')
+    local('markdown_py -f docs/usage.html usage.mkd')
 
     if os.path.exists('chrome-app/docs'):
         local('rm -Rf chrome-app/docs')

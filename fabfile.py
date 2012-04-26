@@ -1,12 +1,13 @@
 import os, time
 from glob import glob
-from fabric.api import *
+from fabric.api import task, local, lcd
 
+@task
 def clean():
-
     if os.path.exists('chrome-app'):
         local('rm -Rf chrome-app')
 
+@task
 def static():
 
     local('mkdir -p chrome-app')
@@ -16,6 +17,7 @@ def static():
     local('cp -R vendor chrome-app')
     local('cp -R res chrome-app')
 
+@task
 def build(f=None):
 
     local('mkdir -p chrome-app/js')
@@ -34,12 +36,13 @@ def build(f=None):
 
     local('mv docs chrome-app')
 
+@task(default=True)
 def chrome():
-
     clean()
     static()
     build()
 
+@task
 def pack():
 
     chrome()
@@ -50,6 +53,7 @@ def pack():
     with lcd('chrome-app'):
         local('zip -r ../key-fu.zip ./*')
 
+@task
 def watch():
 
     globs_to_watch = [
@@ -84,12 +88,14 @@ def watch():
 
         time.sleep(.2)
 
+@task
 def coffee(infile, outfile):
     local('coffee -p {infile} > chrome-app/js/{outfile}'.format(
         infile=infile,
         outfile=outfile
         ))
 
+@task
 def lessc(infile, outfile):
     local('lessc {infile} > chrome-app/css/{outfile}'.format(
         infile=infile,

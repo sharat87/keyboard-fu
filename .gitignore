@@ -1,4 +1,3 @@
-syntax: glob
 chrome-app
 key-fu.zip
 *.pyc

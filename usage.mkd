@@ -112,8 +112,8 @@ a lack of knowledge in me, or just plain oversight.
 # Myself
 
 I am Shrikant Sharat, from Mumbai. The best way to get in touch with me is via
-email ([shrikantsharat.k@gmail.com](mailto:shrikantsharat.k@gmail.com)) or
-twitter ([@sharat87](http://twitter.com/sharat87)).
+email ([self@sharats.me](mailto:shrikantsharat.k@gmail.com)) or twitter
+([@sharat87](http://twitter.com/sharat87)).
 
 Also, don't forget to [rate the
 extension](https://chrome.google.com/webstore/detail/cafiohcgicchdfciefpbjjgigbmajndb)

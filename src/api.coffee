@@ -39,6 +39,11 @@ body = $ 'body'
         log 'toggle key reference from fu'
         cs.toggleKeyReference()
 
+    # Disable/Enable Keyboard-fu in current tab
+    toggleKeyboardFu: ->
+        log 'toggle keyboard-fu from fu'
+        cs.toggleKeyboardFu()
+
     # Scroll down ``pixels`` pixels (default 100), in ``time`` milliseconds (default 150). Give time as 0, to bypass animation.
     scrollDown: (size=100, time=150) ->
         log 'scroll down from fu'
@@ -93,6 +98,11 @@ body = $ 'body'
     tabClose: ->
         log 'close tab from fu'
         chrome.extension.sendRequest action: 'tabClose'
+
+    # Close all but the current tab.
+    tabCloseOther: ->
+        log 'close other tabs from fu'
+        chrome.extension.sendRequest action: 'tabCloseOther'
 
     # Undo closing of last tab.
     tabUndoClose: ->

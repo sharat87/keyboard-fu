@@ -34,34 +34,41 @@ code, pre, tt, textarea {
     float: left;
     position: fixed;
     border-right: thin solid gray;
-}
 
-#sidePane a {
-    text-decoration: none;
-    color: black;
-    display: block;
-    padding: 2px 4px;
-}
+    a {
+        text-decoration: none;
+        color: black;
+        display: block;
+        padding: 2px 4px;
 
-#sidePane a:hover {
-    background: #ABCDEF;
+        &:hover {
+            background: #ABCDEF;
+        }
+
+    }
+
 }
 
 #keyList {
     max-height: 300px;
     overflow-y: scroll;
-}
 
-#keyList a.hotkey-item.selected {
-    background: #ABCDEF;
-}
+    a.hotkey-item {
 
-#keyList a.hotkey-item .keyc {
-    margin-right: 10px;
-}
+        &.selected {
+            background: #ABCDEF;
+        }
 
-#keyList a.hotkey-item .desc {
-    color: gray;
+        .keyc {
+            margin-right: 10px;
+        }
+
+        .desc {
+            color: gray;
+        }
+
+    }
+
 }
 
 #newKeyBtn {
@@ -84,39 +91,41 @@ code, pre, tt, textarea {
 
 #keyForm {
     padding: 4px 7px;
-}
 
-#keyForm label {
-    display: block;
-}
+    label {
+        display: block;
+    }
 
-#keyForm span.title {
-    width: 170px;
-    display: inline-block;
-    cursor: default;
-}
+    span.title {
+        width: 170px;
+        display: inline-block;
+        cursor: default;
+    }
 
-#keyForm input.text,
-#keyForm textarea {
-    padding: 4px 8px;
-    width: 300px;
-    border: thin solid gray;
-}
+    input.text,
+    textarea {
+        padding: 4px 8px;
+        width: 300px;
+        border: thin solid gray;
+    }
 
-#keyForm .keyc-display {
-    font-family: DroidSansMono;
-    margin-right: 8px;
-    padding: 3px 4px;
-}
+    textarea {
+        vertical-align: top;
+    }
 
-#keyForm .keyc-display.capturing {
-    background-color: maroon;
-    -webkit-border-radius: 2px;
-    color: beige;
-}
+    .keyc-display {
+        font-family: DroidSansMono;
+        margin-right: 8px;
+        padding: 3px 4px;
 
-#keyForm textarea {
-    vertical-align: top;
+        &.capturing {
+            background-color: maroon;
+            -webkit-border-radius: 2px;
+            color: beige;
+        }
+
+    }
+
 }
 
 #keyFormControls {

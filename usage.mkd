@@ -1,0 +1,155 @@
+# Keyboard-fu Usage
+
+## Introduction
+
+Keyboard-fu (kfu in short) lets you assign arbitrary javascript to be executed
+for particular keystrokes. You are provided an API for various browser related
+actions from scrolling the page you are viewing to moving tabs, undo close tabs
+etc. You may mix and match these API functions and top it up with any arbitrary
+javascript to make your magic come true.
+
+For example, you could have a single keystroke that only works on `twitter.com`
+(yes, kfu supports a simple and powerful filtering mechanism), hitting which,
+may aggregate all the youtube video links you have in your timeline and open
+them up in individual tabs. Or, you could have a hotkey that works only on
+`youtube.com/v/*` which would like/unlike the video you are watching. The
+possibilities are endless.
+
+## Configuring keys
+
+In the options page, you can see the currently available hotkeys to the left of
+the page. Click on one of them to view/edit it. There is also a *Add new
+hotkey* at the bottom of that list to add a new hotkey.
+
+When you are editing a hotkey, click on the *Start Capture* button and hit the
+keys you want to have this hotkey to trigger. For example, if you hit the keys
+`abcd` while capture is on, they will be recorded and appear in the field next
+to the capture button. To invoke the javascript code associated with this
+hotkey, you have to hit the keys `a`, `b`, `c`, `d` in that order as you did
+the recording and do that a bit quickly. When you hit `d` the code associated
+with this hotkey will run in the current page. Try it out, put the following
+code in the code field and save it.
+
+    alert('yay! fu rocks!');
+
+Now go to any webpage, say instapaper.com and hit the key(s) you have assigned
+to this hotkey. You should see the alert you put in the code appear. This is
+pretty much the basics of what you need to know to create simple hotkeys.
+
+## Using the URL filters
+
+The way the filters work might seem tricky at first, but bear with me, it is
+the best combination of simplicity and power I could gather. Once you get the
+gist of it, you can easily create hotkeys that work on certain pages and don't
+on some other pages.
+
+First off, there are two sets of filters for each hotkey. The local filters and
+the global filters. Local filters are local to the hotkey in which they are
+defined, but global hotkeys are common to all hotkeys. You can view/edit global
+hotkeys by clicking on *Global Filters* in the left side of the options page.
+Similarly, local filters can be configured for each hotkey in the hotkey
+editing form.
+
+Now, when you open a webpage in chrome, Keyboard-fu goes through all the
+defined hotkeys and decides whether they apply on the page you are viewing or
+not. The way this is done is quite simple. For each hotkey, we create a master
+filter list as the following
+
+> Master filters list = Local filters list + Global filters list
+
+Using this master filters list, we iterate over each filter and check if the
+URL of the page you are viewing matches the filter and stop at the first match.
+If this matched filter starts with a `-`, then the hotkey is **not** loaded,
+else it is loaded. If none of the filters match the url you are viewing, the
+hotkey is ***not*** loaded. This is why it is recommended to add a *match all*
+filter, i.e., `*` as the last item in the global filters.
+
+Also, note that when matching a filter with the url, a leading `-` if any, will
+be stripped off before doing a match check.
+
+## Using the API
+
+In the javascript you write in the code field for each hotkey, you are given
+access to a simple yet powerful API to enable performing certain actions. You
+can know more about the API available by clicking the *API Documentation* item
+in the left side of the options page. The API is still evolving and does not
+have everything under the sky. If you think something could be added to the
+API, please let me know.
+
+In addition of the API provided by Keyboard-fu, jQuery 1.5.1 is also available
+for these code snippets. You may use this to do all sorts of DOM manipulations
+or various ajax calls etc. Oh, and you don't need to wrap your code in the
+jQuery's ready event, if you're wondering, because by the time the hotkeys are
+loaded, the ready event will have fired.
+
+# Known problems/Caveats
+
+## Problems
+
+* Opening options page through API opens a new tab with options, even if an
+  options tab is already open.
+* `history.back` and `history.forward` don't integrate with the native
+  back/forward buttons, sometimes.
+
+## Limitations
+
+There are a few limitations on what you could achieve with Keyboard-fu. The
+reason for these is sometimes the limits imposed by chrome's extension API, or
+a lack of knowledge in me, or just plain oversight.
+
+* Hotkeys don't work on chrome extension pages and the webstore.
+  This is a security limitation imposed by Google
+* They also don't work on special chrome pages like the start page, extensions
+  page etc.
+* Some API functions may behave weirdly when operating with multiple windows.
+  If you face any such issue, please let me know.
+* If you configured a hotkey and the webpage you open also uses the same
+  hotkey, both will be fired when you hit the key. This is because I couldn't
+  figure out a way to detect if the webpage is handling a particular key. The
+  only way around this currently, is to add that webpage as a negative filter
+  (with a `-` in the front) to that hotkey.
+
+# Myself
+
+I am Shrikant Sharat, from Mumbai. The best way to get in touch with me is via
+email ([shrikantsharat.k@gmail.com](mailto:shrikantsharat.k@gmail.com)) or
+twitter ([@sharat87](http://twitter.com/sharat87)).
+
+Also, don't forget to [rate the
+extension](https://chrome.google.com/webstore/detail/cafiohcgicchdfciefpbjjgigbmajndb)
+:)
+
+# License
+
+Keyboard-fu is released with the MIT license,
+
+> Copyright (c) 2011 Shrikant Sharat Kandula.
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+> 
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+> 
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+> THE SOFTWARE.
+
+The code is [hosted on bitbucket](http://bitbucket.org/sharat87/keyboard-fu)
+and also on [github](http://github.com/sharat87/keyboard-fu), but I don't
+assure the github version will be up to date. Syncing hg with github is not a
+very pleasant experience :)
+
+---
+
+by Shrikant Sharat Kandula ([@sharat87](http://twitter.com/sharat87))
+
+<link rel=stylesheet href=/css/usage.css />

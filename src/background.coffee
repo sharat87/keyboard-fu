@@ -90,7 +90,9 @@ jQuery ($) ->
         openBookmarkByPath: (request, sender, sendResponse) ->
             console.info 'openBookmarkByPath request made'
 
-            pathItems = request.location.split '/'
+            {location, target} = request
+
+            pathItems = location.split '/'
             console.info 'pathItems is', pathItems
 
             chrome.bookmarks.getTree (nodes) ->
@@ -155,10 +157,18 @@ jQuery ($) ->
             chrome.tabs.getSelected null, (tab) ->
                 chrome.tabs.remove(tab.id)
 
+        tabCloseOther: (request, sender, sendResponse) ->
+            console.info 'tabCloseOther request made'
+            chrome.tabs.getSelected null, (tab) ->
+                chrome.tabs.getAllInWindow tab.windowId, (tabs) ->
+                    tabids = (t.id for t in tabs when t.id isnt tab.id)
+                    chrome.tabs.remove tabids
+
         tabUndoClose: (request, sender, sendResponse) ->
             console.info 'tabUndoClose request made'
             if allClosedTabs.length
-                chrome.tabs.create url: allClosedTabs.pop()
+                {url, index} = allClosedTabs.pop()
+                chrome.tabs.create { url, index }
 
     keyStore =
 
@@ -182,7 +192,8 @@ jQuery ($) ->
             17: { keyc: 'i', desc: 'Go forward', code: 'history.forward()', filters: [] }
             18: { keyc: 'gu', desc: 'Go up in the url', code: 'fu.open("!parent")', filters: [] }
             19: { keyc: 'gs', desc: 'View source of current page', code: 'fu.viewSource()', filters: [] }
-            20: { keyc: '?', desc: 'Toggle help box', code: 'fu.toggleKeyReference()', filters: ['http:#*.google.com/*'] }
+            20: { keyc: 'gf', desc: 'Toggle Keyboard-fu in current tab', code: 'fu.toggleKeyboardFu()', filters: [] }
+            21: { keyc: '?', desc: 'Toggle help box', code: 'fu.toggleKeyReference()', filters: ['http:#*.google.com/*'] }
 
         # Storage data strucutre:
         # Eack hotkey is an array of the form,
@@ -242,7 +253,8 @@ jQuery ($) ->
                         chrome.tabs.update tab.id, { selected: true }
                         break
 
-    # Spying on closed tabs. Code stolen from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
+    # Spying on closed tabs.
+    # Part of the following code stolen from http://code.google.com/p/recently-closed-tabs/source/browse/trunk/background.html
     # Listener on update.
     allOpenTabs = {}
     allClosedTabs = []
@@ -255,4 +267,8 @@ jQuery ($) ->
         return if tabId not of allOpenTabs
         tabInfo = allOpenTabs[tabId]
         delete allOpenTabs[tabId]
-        allClosedTabs.push(tabInfo.url)
+        allClosedTabs.push(tabInfo)
+
+    chrome.tabs.getAllInWindow null, (tabs) ->
+        for t in tabs
+            allOpenTabs[t.id] = t

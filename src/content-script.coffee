@@ -1,11 +1,12 @@
 @log = (args...) ->
 
-    chrome.extension.sendRequest action: 'console', fn: 'info', args
+    chrome.extension.sendRequest { action: 'console', fn: 'info', args }
 
 @cs = {}
 
 jQuery ($) ->
 
+    enableFu = yes
     keyComboMap = {}
 
     mask = {}
@@ -71,6 +72,9 @@ jQuery ($) ->
 
     # Key binding functionality
     keyHandler = (e) ->
+
+        # Return if keyboard-fu is disabled
+        return unless enableFu
 
         # Don't fire in text-accepting inputs that we didn't directly bind to
         return if this isnt e.target and (
@@ -150,3 +154,6 @@ jQuery ($) ->
             refElem.html(markup)
 
         refElem.toggle()
+
+    cs.toggleKeyboardFu = ->
+        enableFu = not enableFu

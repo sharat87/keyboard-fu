@@ -1,5 +1,4 @@
 BUGZ:
-Undo closed tab does not remember the place of the closed tab
 Opening options page throught API opens a new tab with options, even if an options tab is already open
 history.back and history.forward don't integrate with the native back/forward buttons... sometimes
 Bold/Italic faces of Puritan not available

@@ -12,10 +12,11 @@
     padding: 5px 12px;
     display: none;
     -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
-}
 
-#keyboardFuQueue.active {
-    display: block;
+    &.active {
+        display: block;
+    }
+
 }
 
 #fuKeyRef {
@@ -31,23 +32,24 @@
     z-index: 9999999;
     opacity: .85;
     -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .8);
-}
 
-#fuKeyRef .fu-key-item {
-    clear: both;
-    margin: 3px 7px;
-}
+    .fu-key-item {
+        clear: both;
+        margin: 3px 7px;
+    }
 
-#fuKeyRef .fu-refbox-keyc {
-    margin-left: 12px;
-    float: left;
-    background: #333;
-    -webkit-border-radius: 2px;
-    padding: 2px 3px;
-    font-size: 1em;
-}
+    .fu-refbox-keyc {
+        margin-left: 12px;
+        float: left;
+        background: #333;
+        -webkit-border-radius: 2px;
+        padding: 2px 3px;
+        font-size: 1em;
+    }
 
-#fuKeyRef .fu-refbox-desc {
-    width: 120px;
-    float: left;
+    .fu-refbox-desc {
+        width: 120px;
+        float: left;
+    }
+
 }

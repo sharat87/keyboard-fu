@@ -60,6 +60,7 @@ keyHandler = (e) ->
     return unless keycCapture
 
     e.stopPropagation()
+    console.info 'capture', e
 
     keyForm.find('span.keyc-display').text (i, oldVal) ->
         return oldVal + readKeyCombo(e, yes)
@@ -113,7 +114,8 @@ $('#globalFiltersBtn').click (e) ->
     globalFilterBox.show().siblings('div.box').hide()
 
 $('#globalFilterSaveBtn').click (e) ->
-    chrome.extension.sendRequest { action: 'setGlobalFilters', filters: $('#globalFilterInput').val() }, (response) ->
+    th = $ this
+    chrome.extension.sendRequest { action: 'setGlobalFilters', filters: $('#globalFilterInput').val().split('\n') }, (response) ->
         loadGlobalFilters()
         msg = if response.ok then '<span>Saved successfully.</span>' else '<span>Saving failed. Please try again later.</span>'
         th.after(msg).next().delay(2000).fadeOut(1000)
@@ -122,8 +124,8 @@ $('#bottomControls').delegate 'a', 'click', (e) ->
     e.preventDefault()
     keyList.find('a.selected').removeClass('selected')
 
-$('#docBtn').click  (e) ->
-    window.open chrome.extension.getURL('docs/api.html')
+$('a[target=_blank]').click  (e) ->
+    window.open chrome.extension.getURL($(this).attr('href'))
 
 ieBox = $('#ieBox')
 ieBox.delegate '.import-btn', 'click', (e) ->

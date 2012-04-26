@@ -1,6 +1,6 @@
 @log = (args...) ->
 
-    chrome.extension.sendRequest action: 'console', fn: 'info', args
+    chrome.extension.sendRequest { action: 'console', fn: 'info', args }
 
 @readKeyCombo = (e, preventDefault) ->
 
@@ -27,6 +27,32 @@
         "U+00BF": ["U+002F", "U+003F"] # /?
     }
 
+    specialKeys =
+        32: 'Space'
+        33: 'PageUp'
+        34: 'PageDown'
+        35: 'End'
+        36: 'Home'
+        37: 'Left'
+        38: 'Up'
+        39: 'Right'
+        40: 'Down'
+        44: 'PrScr'
+        45: 'Insert'
+        46: 'Delete'
+        112: 'F1'
+        113: 'F2'
+        114: 'F3'
+        115: 'F4'
+        116: 'F5'
+        117: 'F6'
+        118: 'F7'
+        119: 'F8'
+        120: 'F9'
+        121: 'F10'
+        122: 'F11'
+        123: 'F12'
+
     platform = if navigator.userAgent.indexOf("Mac") isnt -1
                    "Mac"
                else if navigator.userAgent.indexOf("Linux") isnt -1
@@ -36,8 +62,20 @@
 
     if e.type is 'keydown'
 
+        if e.keyCode of specialKeys
+
+            # keypress event will not be fired for these. So handle them right away.
+
+            keyChar = '<' +
+                (if e.metaKey then 'M-' else '') +
+                (if e.ctrlKey then 'C-' else '') +
+                (if e.altKey then 'A-' else '') +
+                (if e.shiftKey then 'S-' else '') +
+                specialKeys[e.keyCode] +
+                '>'
+
         # handle modifiers being pressed.don't handle shiftKey alone (to avoid / being interpreted as ?
-        if (e.metaKey or e.ctrlKey or e.altKey) and e.keyCode > 31
+        else if (e.metaKey or e.ctrlKey or e.altKey) and e.keyCode > 31
 
             e.preventDefault() if preventDefault
 

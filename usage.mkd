@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Keyboard-fu (kfu in short) lets you assign arbitrary javascript to be executed
-for particular keystrokes. You are provided an API for various browser related
-actions from scrolling the page you are viewing to moving tabs, undo close tabs
-etc. You may mix and match these API functions and top it up with any arbitrary
-javascript to make your magic come true.
+Keyboard-fu (also referred to as kfu in short) lets you assign arbitrary
+javascript to be executed for particular keystrokes. You are provided an API for
+various browser related actions from scrolling the page you are viewing to
+moving tabs, undo close tabs etc. You may mix and match these API functions and
+top it up with any arbitrary javascript to make your magic come true.
 
 For example, you could have a single keystroke that only works on `twitter.com`
 (yes, kfu supports a simple and powerful filtering mechanism), hitting which,
